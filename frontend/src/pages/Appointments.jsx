@@ -1,3 +1,6 @@
+import { useState } from "react";
+import AppointmentForm from "../components/AppointmentForm";
+
 const appointments = [
     {
         id: "1",
@@ -38,6 +41,8 @@ const appointments = [
 ];
 
 function Appointments() {
+    const [isFormOpen, setIsFormOpen] = useState(false);
+
     return (
         <div>
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "20px" }}>
@@ -47,6 +52,7 @@ function Appointments() {
                 </div>
 
                 <button
+                    onClick={() => setIsFormOpen(true)}
                     style={{
                         background: "#2563eb",
                         color: "white",
@@ -95,6 +101,10 @@ function Appointments() {
                     </tbody>
                 </table>
             </div>
+
+            {isFormOpen && (
+                <AppointmentForm onClose={() => setIsFormOpen(false)} />
+            )}
         </div>
     );
 }
