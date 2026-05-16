@@ -1,28 +1,36 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PatientForm from "../components/PatientForm";
 import PatientDetail from "../components/PatientDetail";
-
-const patients = [
-    {
-        id: "1",
-        fullName: "Anna Novak",
-        phone: "+420 771 293 480",
-    },
-    {
-        id: "2",
-        fullName: "John Smith",
-        phone: "+420 279 238 910",
-    },
-    {
-        id: "3",
-        fullName: "Petra Svobodova",
-        phone: "+420 109 302 334",
-    },
-];
+import { createPatient, getPatients } from "../api/patientApi";
 
 function Patients() {
+    const [patients, setPatients] = useState([]);
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [selectedPatient, setSelectedPatient] = useState(null);
+    const [error, setError] = useState("");
+
+    async function loadPatients() {
+        try {
+            const data = await getPatients();
+            setPatients(data);
+        } catch (e) {
+            setError("Could not load patients.");
+        }
+    }
+
+    useEffect(() => {
+        loadPatients();
+    }, []);
+
+    async function handleCreatePatient(patient) {
+        try {
+            await createPatient(patient);
+            setIsFormOpen(false);
+            await loadPatients();
+        } catch (e) {
+            setError("Could not create patient.");
+        }
+    }
 
     return (
         <div>
@@ -53,6 +61,12 @@ function Patients() {
                     + Add Patient
                 </button>
             </div>
+
+            {error && (
+                <p style={{ color: "red", marginBottom: "12px" }}>
+                    {error}
+                </p>
+            )}
 
             <div
                 style={{
@@ -104,10 +118,19 @@ function Patients() {
                     ))}
                     </tbody>
                 </table>
+
+                {patients.length === 0 && (
+                    <p style={{ color: "#6b7280", padding: "20px" }}>
+                        No patients found.
+                    </p>
+                )}
             </div>
 
             {isFormOpen && (
-                <PatientForm onClose={() => setIsFormOpen(false)} />
+                <PatientForm
+                    onClose={() => setIsFormOpen(false)}
+                    onSubmit={handleCreatePatient}
+                />
             )}
 
             {selectedPatient && (

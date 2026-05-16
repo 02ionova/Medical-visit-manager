@@ -1,43 +1,103 @@
-function PatientForm({ onClose }) {
+import { useState } from "react";
+
+function PatientForm({ onClose, onSubmit }) {
+    const [formData, setFormData] = useState({
+        fullName: "",
+        phone: "",
+        dateOfBirth: "",
+        address: "",
+        note: "",
+    });
+
+    function handleChange(event) {
+        const { name, value } = event.target;
+
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    }
+
+    function handleSubmit(event) {
+        event.preventDefault();
+        onSubmit(formData);
+    }
+
     return (
         <div style={overlayStyle}>
-            <div style={modalStyle}>
+            <form style={modalStyle} onSubmit={handleSubmit}>
                 <h2>New Patient</h2>
 
                 <div style={formGridStyle}>
                     <label>
                         Full name
-                        <input style={inputStyle} placeholder="Patient name" />
+                        <input
+                            name="fullName"
+                            value={formData.fullName}
+                            onChange={handleChange}
+                            style={inputStyle}
+                            placeholder="Patient name"
+                            required
+                        />
                     </label>
 
                     <label>
                         Phone
-                        <input style={inputStyle} placeholder="+420..." />
+                        <input
+                            name="phone"
+                            value={formData.phone}
+                            onChange={handleChange}
+                            style={inputStyle}
+                            placeholder="+420..."
+                            required
+                        />
                     </label>
 
                     <label>
                         Date of birth
-                        <input style={inputStyle} type="date" />
+                        <input
+                            name="dateOfBirth"
+                            value={formData.dateOfBirth}
+                            onChange={handleChange}
+                            style={inputStyle}
+                            type="date"
+                            required
+                        />
                     </label>
 
                     <label>
                         Address
-                        <input style={inputStyle} placeholder="City, Street, ZIP" />
+                        <input
+                            name="address"
+                            value={formData.address}
+                            onChange={handleChange}
+                            style={inputStyle}
+                            placeholder="City, Street, ZIP"
+                            required
+                        />
                     </label>
                 </div>
 
                 <label>
                     Note
-                    <textarea style={textareaStyle} placeholder="Additional note" />
+                    <textarea
+                        name="note"
+                        value={formData.note}
+                        onChange={handleChange}
+                        style={textareaStyle}
+                        placeholder="Additional note"
+                    />
                 </label>
 
                 <div style={footerStyle}>
-                    <button style={cancelButtonStyle} onClick={onClose}>
+                    <button type="button" style={cancelButtonStyle} onClick={onClose}>
                         Cancel
                     </button>
-                    <button style={createButtonStyle}>Create</button>
+                    <button type="submit" style={createButtonStyle}>
+                        Create
+                    </button>
                 </div>
-            </div>
+            </form>
         </div>
     );
 }
