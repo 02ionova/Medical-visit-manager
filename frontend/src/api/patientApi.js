@@ -22,6 +22,23 @@ export async function createPatient(patient) {
     return response.json();
 }
 
+export async function updatePatient(id, patient) {
+    const response = await fetch(`http://localhost:3000/patients/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(patient),
+    });
+
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Failed to update patient");
+    }
+
+    return response.json();
+}
+
 export async function deletePatient(id) {
     const response = await fetch(`http://localhost:3000/patients/${id}`, {
         method: "DELETE",
@@ -32,3 +49,4 @@ export async function deletePatient(id) {
         throw new Error(error.message || "Failed to delete patient");
     }
 }
+

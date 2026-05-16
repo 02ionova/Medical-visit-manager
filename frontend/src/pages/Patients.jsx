@@ -2,12 +2,18 @@ import { useEffect, useState } from "react";
 import PatientForm from "../components/PatientForm";
 import PatientDetail from "../components/PatientDetail";
 import DeleteConfirmDialog from "../components/DeleteConfirmDialog";
-import { createPatient, deletePatient, getPatients } from "../api/patientApi";
+import {
+    createPatient,
+    deletePatient,
+    getPatients,
+    updatePatient,
+} from "../api/patientApi";
 
 function Patients() {
     const [patients, setPatients] = useState([]);
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [selectedPatient, setSelectedPatient] = useState(null);
+    const [patientToEdit, setPatientToEdit] = useState(null);
     const [patientToDelete, setPatientToDelete] = useState(null);
     const [error, setError] = useState("");
 
@@ -31,7 +37,17 @@ function Patients() {
             setIsFormOpen(false);
             await loadPatients();
         } catch (e) {
-            setError("Could not create patient.");
+            throw e;
+        }
+    }
+
+    async function handleUpdatePatient(patient) {
+        try {
+            await updatePatient(patientToEdit.id, patient);
+            setPatientToEdit(null);
+            await loadPatients();
+        } catch (e) {
+            throw e;
         }
     }
 
@@ -118,29 +134,21 @@ function Patients() {
                             <td style={tdStyle}>
                                 <button
                                     onClick={() => setSelectedPatient(patient)}
-                                    style={{
-                                        border: "none",
-                                        background: "#2563eb",
-                                        color: "white",
-                                        borderRadius: "8px",
-                                        padding: "8px 12px",
-                                        cursor: "pointer",
-                                        marginRight: "8px",
-                                    }}
+                                    style={viewButtonStyle}
                                 >
                                     View
                                 </button>
 
                                 <button
+                                    onClick={() => setPatientToEdit(patient)}
+                                    style={editButtonStyle}
+                                >
+                                    Edit
+                                </button>
+
+                                <button
                                     onClick={() => setPatientToDelete(patient)}
-                                    style={{
-                                        border: "none",
-                                        background: "#ef4444",
-                                        color: "white",
-                                        borderRadius: "8px",
-                                        padding: "8px 12px",
-                                        cursor: "pointer",
-                                    }}
+                                    style={deleteButtonStyle}
                                 >
                                     Delete
                                 </button>
@@ -161,6 +169,14 @@ function Patients() {
                 <PatientForm
                     onClose={() => setIsFormOpen(false)}
                     onSubmit={handleCreatePatient}
+                />
+            )}
+
+            {patientToEdit && (
+                <PatientForm
+                    patient={patientToEdit}
+                    onClose={() => setPatientToEdit(null)}
+                    onSubmit={handleUpdatePatient}
                 />
             )}
 
@@ -191,6 +207,35 @@ const thStyle = {
 const tdStyle = {
     padding: "14px",
     borderBottom: "1px solid #e5e7eb",
+};
+
+const viewButtonStyle = {
+    border: "none",
+    background: "#2563eb",
+    color: "white",
+    borderRadius: "8px",
+    padding: "8px 12px",
+    cursor: "pointer",
+    marginRight: "8px",
+};
+
+const editButtonStyle = {
+    border: "none",
+    background: "#f59e0b",
+    color: "white",
+    borderRadius: "8px",
+    padding: "8px 12px",
+    cursor: "pointer",
+    marginRight: "8px",
+};
+
+const deleteButtonStyle = {
+    border: "none",
+    background: "#ef4444",
+    color: "white",
+    borderRadius: "8px",
+    padding: "8px 12px",
+    cursor: "pointer",
 };
 
 export default Patients;

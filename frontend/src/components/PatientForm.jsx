@@ -1,13 +1,15 @@
 import { useState } from "react";
 
-function PatientForm({ onClose, onSubmit }) {
+function PatientForm({ patient, onClose, onSubmit }) {
     const [formData, setFormData] = useState({
-        fullName: "",
-        phone: "",
-        dateOfBirth: "",
-        address: "",
-        note: "",
+        fullName: patient?.fullName || "",
+        phone: patient?.phone || "",
+        dateOfBirth: patient?.dateOfBirth || "",
+        address: patient?.address || "",
+        note: patient?.note || "",
     });
+
+    const [error, setError] = useState("");
 
     function handleChange(event) {
         const { name, value } = event.target;
@@ -18,15 +20,21 @@ function PatientForm({ onClose, onSubmit }) {
         });
     }
 
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
-        onSubmit(formData);
+        setError("");
+
+        try {
+            await onSubmit(formData);
+        } catch (e) {
+            setError(e.message);
+        }
     }
 
     return (
         <div style={overlayStyle}>
             <form style={modalStyle} onSubmit={handleSubmit}>
-                <h2>New Patient</h2>
+                <h2>{patient ? "Edit Patient" : "New Patient"}</h2>
 
                 <div style={formGridStyle}>
                     <label>
@@ -89,12 +97,19 @@ function PatientForm({ onClose, onSubmit }) {
                     />
                 </label>
 
+                {error && (
+                    <p style={{ color: "red", marginTop: "12px" }}>
+                        {error}
+                    </p>
+                )}
+
                 <div style={footerStyle}>
                     <button type="button" style={cancelButtonStyle} onClick={onClose}>
                         Cancel
                     </button>
+
                     <button type="submit" style={createButtonStyle}>
-                        Create
+                        {patient ? "Save changes" : "Create"}
                     </button>
                 </div>
             </form>
