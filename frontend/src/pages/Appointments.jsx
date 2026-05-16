@@ -21,6 +21,7 @@ function Appointments() {
 
     const [search, setSearch] = useState("");
     const [dateFilter, setDateFilter] = useState("");
+    const [statusFilter, setStatusFilter] = useState("");
 
     const [error, setError] = useState("");
 
@@ -54,10 +55,10 @@ function Appointments() {
             patientName.includes(search.toLowerCase()) ||
             type.includes(search.toLowerCase());
 
-        const matchesDate =
-            !dateFilter || appointment.date === dateFilter;
+        const matchesDate = !dateFilter || appointment.date === dateFilter;
+        const matchesStatus = !statusFilter || appointment.status === statusFilter;
 
-        return matchesSearch && matchesDate;
+        return matchesSearch && matchesDate && matchesStatus;
     });
 
     async function handleCreateAppointment(appointment) {
@@ -100,10 +101,7 @@ function Appointments() {
                     </p>
                 </div>
 
-                <button
-                    onClick={() => setIsFormOpen(true)}
-                    style={addButtonStyle}
-                >
+                <button onClick={() => setIsFormOpen(true)} style={addButtonStyle}>
                     + Add Appointment
                 </button>
             </div>
@@ -121,13 +119,41 @@ function Appointments() {
                     type="date"
                     value={dateFilter}
                     onChange={(e) => setDateFilter(e.target.value)}
-                    style={dateInputStyle}
+                    style={filterInputStyle}
                 />
+
+                <div style={{ position: "relative" }}>
+                    <select
+                        value={statusFilter}
+                        onChange={(e) => setStatusFilter(e.target.value)}
+                        style={filterInputStyle}
+                    >
+                        <option value="">All statuses</option>
+                        <option value="Planned">Planned</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+
+                    <span
+                        style={{
+                            position: "absolute",
+                            right: "16px",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            pointerEvents: "none",
+                            color: "#64748b",
+                            fontSize: "12px",
+                        }}
+                    >
+        ▼
+    </span>
+                </div>
 
                 <button
                     onClick={() => {
                         setSearch("");
                         setDateFilter("");
+                        setStatusFilter("");
                     }}
                     style={clearButtonStyle}
                 >
@@ -136,9 +162,7 @@ function Appointments() {
             </div>
 
             {error && (
-                <p style={{ color: "#ef4444", marginBottom: "12px" }}>
-                    {error}
-                </p>
+                <p style={{ color: "#ef4444", marginBottom: "12px" }}>{error}</p>
             )}
 
             <div style={tableContainerStyle}>
@@ -151,6 +175,7 @@ function Appointments() {
                         <th style={thStyle}>To</th>
                         <th style={thStyle}>Patient</th>
                         <th style={thStyle}>Price</th>
+                        <th style={thStyle}>Status</th>
                         <th style={thStyle}>Action</th>
                     </tr>
                     </thead>
@@ -162,10 +187,11 @@ function Appointments() {
                             <td style={tdStyle}>{appointment.date}</td>
                             <td style={tdStyle}>{appointment.from}</td>
                             <td style={tdStyle}>{appointment.to}</td>
-                            <td style={tdStyle}>
-                                {getPatientName(appointment.patientId)}
-                            </td>
+                            <td style={tdStyle}>{getPatientName(appointment.patientId)}</td>
                             <td style={tdStyle}>${appointment.price}</td>
+                            <td style={tdStyle}>
+                                <StatusBadge status={appointment.status || "Planned"} />
+                            </td>
                             <td style={tdStyle}>
                                 <div style={{ display: "flex", gap: "10px" }}>
                                     <button
@@ -196,9 +222,7 @@ function Appointments() {
                 </table>
 
                 {filteredAppointments.length === 0 && (
-                    <div style={emptyStateStyle}>
-                        No appointments found.
-                    </div>
+                    <div style={emptyStateStyle}>No appointments found.</div>
                 )}
             </div>
 
@@ -230,14 +254,42 @@ function Appointments() {
             {appointmentToDelete && (
                 <DeleteConfirmDialog
                     title="Delete appointment"
-                    message={`Are you sure you want to delete ${appointmentToDelete.type} for ${getPatientName(
-                        appointmentToDelete.patientId
-                    )}?`}
+                    message={`Are you sure you want to delete ${
+                        appointmentToDelete.type
+                    } for ${getPatientName(appointmentToDelete.patientId)}?`}
                     onCancel={() => setAppointmentToDelete(null)}
                     onConfirm={handleConfirmDelete}
                 />
             )}
         </div>
+    );
+}
+
+function StatusBadge({ status }) {
+    const styles = {
+        Planned: {
+            background: "#dbeafe",
+            color: "#1d4ed8",
+        },
+        Completed: {
+            background: "#dcfce7",
+            color: "#15803d",
+        },
+        Cancelled: {
+            background: "#fee2e2",
+            color: "#b91c1c",
+        },
+    };
+
+    return (
+        <span
+            style={{
+                ...statusBadgeStyle,
+                ...(styles[status] || styles.Planned),
+            }}
+        >
+      {status}
+    </span>
     );
 }
 
@@ -253,6 +305,7 @@ const filterBarStyle = {
     gap: "14px",
     marginBottom: "20px",
     alignItems: "center",
+    flexWrap: "wrap",
 };
 
 const searchInputStyle = {
@@ -267,13 +320,20 @@ const searchInputStyle = {
     boxShadow: "0 4px 14px rgba(0,0,0,0.04)",
 };
 
-const dateInputStyle = {
-    padding: "14px 16px",
+const filterInputStyle = {
+    height: "52px",
+    minWidth: "190px",
+    padding: "0 16px",
+    paddingRight: "42px",
     borderRadius: "14px",
     border: "1px solid #dbeafe",
     background: "white",
     fontSize: "15px",
     outline: "none",
+    boxShadow: "0 4px 14px rgba(0,0,0,0.04)",
+    appearance: "none",
+    WebkitAppearance: "none",
+    MozAppearance: "none",
 };
 
 const clearButtonStyle = {
@@ -319,6 +379,14 @@ const thStyle = {
 const tdStyle = {
     padding: "18px 16px",
     borderBottom: "1px solid #e5e7eb",
+};
+
+const statusBadgeStyle = {
+    display: "inline-block",
+    padding: "6px 12px",
+    borderRadius: "999px",
+    fontSize: "13px",
+    fontWeight: "700",
 };
 
 const emptyStateStyle = {

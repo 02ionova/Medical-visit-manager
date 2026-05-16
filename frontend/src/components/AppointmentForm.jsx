@@ -7,6 +7,7 @@ function AppointmentForm({ patients, appointment, onClose, onSubmit }) {
         to: appointment?.to || "",
         type: appointment?.type || "",
         price: appointment?.price || "",
+        status: appointment?.status || "Planned",
         note: appointment?.note || "",
         patientId: appointment?.patientId || "",
     });
@@ -104,6 +105,21 @@ function AppointmentForm({ patients, appointment, onClose, onSubmit }) {
                     </label>
 
                     <label>
+                        Status
+                        <select
+                            name="status"
+                            value={formData.status}
+                            onChange={handleChange}
+                            style={inputStyle}
+                            required
+                        >
+                            <option value="Planned">Planned</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </select>
+                    </label>
+
+                    <label>
                         Patient
                         <select
                             name="patientId"
@@ -133,7 +149,11 @@ function AppointmentForm({ patients, appointment, onClose, onSubmit }) {
                     />
                 </label>
 
-                {error && <p style={{ color: "red", marginTop: "12px" }}>{error}</p>}
+                {error && (
+                    <p style={{ color: "#ef4444", marginTop: "12px" }}>
+                        {error}
+                    </p>
+                )}
 
                 <div style={footerStyle}>
                     <button type="button" style={cancelButtonStyle} onClick={onClose}>
@@ -152,10 +172,12 @@ function AppointmentForm({ patients, appointment, onClose, onSubmit }) {
 const overlayStyle = {
     position: "fixed",
     inset: 0,
-    background: "rgba(0,0,0,0.35)",
+    background: "rgba(15, 23, 42, 0.45)",
+    backdropFilter: "blur(4px)",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    zIndex: 1000,
 };
 
 const modalStyle = {
@@ -163,6 +185,7 @@ const modalStyle = {
     borderRadius: "24px",
     padding: "32px",
     width: "760px",
+    maxWidth: "92vw",
     boxShadow: "0 20px 50px rgba(0,0,0,0.2)",
 };
 
