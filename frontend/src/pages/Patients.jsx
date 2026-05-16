@@ -1,3 +1,6 @@
+import { useState } from "react";
+import PatientForm from "../components/PatientForm";
+
 const patients = [
     {
         id: "1",
@@ -17,15 +20,25 @@ const patients = [
 ];
 
 function Patients() {
+
+    const [isFormOpen, setIsFormOpen] = useState(false);
+
     return (
         <div>
-            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "20px" }}>
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    marginBottom: "20px",
+                }}
+            >
                 <div>
                     <h1>All patients</h1>
                     <p>Manage patients and view their details.</p>
                 </div>
 
                 <button
+                    onClick={() => setIsFormOpen(true)}
                     style={{
                         background: "#2563eb",
                         color: "white",
@@ -48,9 +61,19 @@ function Patients() {
                     boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
                 }}
             >
-                <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                <table
+                    style={{
+                        width: "100%",
+                        borderCollapse: "collapse",
+                    }}
+                >
                     <thead>
-                    <tr style={{ background: "#2563eb", color: "white" }}>
+                    <tr
+                        style={{
+                            background: "#2563eb",
+                            color: "white",
+                        }}
+                    >
                         <th style={thStyle}>Patient</th>
                         <th style={thStyle}>Phone</th>
                         <th style={thStyle}>Detail</th>
@@ -68,6 +91,10 @@ function Patients() {
                     </tbody>
                 </table>
             </div>
+
+            {isFormOpen && (
+                <PatientForm onClose={() => setIsFormOpen(false)} />
+            )}
         </div>
     );
 }
