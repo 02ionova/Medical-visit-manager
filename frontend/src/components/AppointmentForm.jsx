@@ -1,14 +1,14 @@
 import { useState } from "react";
 
-function AppointmentForm({ patients, onClose, onSubmit }) {
+function AppointmentForm({ patients, appointment, onClose, onSubmit }) {
     const [formData, setFormData] = useState({
-        date: "",
-        from: "",
-        to: "",
-        type: "",
-        price: "",
-        note: "",
-        patientId: "",
+        date: appointment?.date || "",
+        from: appointment?.from || "",
+        to: appointment?.to || "",
+        type: appointment?.type || "",
+        price: appointment?.price || "",
+        note: appointment?.note || "",
+        patientId: appointment?.patientId || "",
     });
 
     const [error, setError] = useState("");
@@ -39,7 +39,7 @@ function AppointmentForm({ patients, onClose, onSubmit }) {
     return (
         <div style={overlayStyle}>
             <form style={modalStyle} onSubmit={handleSubmit}>
-                <h2>New Appointment</h2>
+                <h2>{appointment ? "Edit Appointment" : "New Appointment"}</h2>
 
                 <div style={formGridStyle}>
                     <label>
@@ -133,18 +133,15 @@ function AppointmentForm({ patients, onClose, onSubmit }) {
                     />
                 </label>
 
-                {error && (
-                    <p style={{ color: "red", marginTop: "12px" }}>
-                        {error}
-                    </p>
-                )}
+                {error && <p style={{ color: "red", marginTop: "12px" }}>{error}</p>}
 
                 <div style={footerStyle}>
                     <button type="button" style={cancelButtonStyle} onClick={onClose}>
                         Cancel
                     </button>
+
                     <button type="submit" style={createButtonStyle}>
-                        Create
+                        {appointment ? "Save changes" : "Create"}
                     </button>
                 </div>
             </form>

@@ -6,6 +6,7 @@ import {
     createAppointment,
     deleteAppointment,
     getAppointments,
+    updateAppointment,
 } from "../api/appointmentApi";
 import { getPatients } from "../api/patientApi";
 
@@ -14,6 +15,7 @@ function Appointments() {
     const [patients, setPatients] = useState([]);
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [selectedAppointment, setSelectedAppointment] = useState(null);
+    const [appointmentToEdit, setAppointmentToEdit] = useState(null);
     const [appointmentToDelete, setAppointmentToDelete] = useState(null);
     const [error, setError] = useState("");
 
@@ -43,6 +45,16 @@ function Appointments() {
         try {
             await createAppointment(appointment);
             setIsFormOpen(false);
+            await loadData();
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    async function handleUpdateAppointment(appointment) {
+        try {
+            await updateAppointment(appointmentToEdit.id, appointment);
+            setAppointmentToEdit(null);
             await loadData();
         } catch (e) {
             throw e;
@@ -131,29 +143,21 @@ function Appointments() {
                             <td style={tdStyle}>
                                 <button
                                     onClick={() => setSelectedAppointment(appointment)}
-                                    style={{
-                                        border: "none",
-                                        background: "#2563eb",
-                                        color: "white",
-                                        borderRadius: "8px",
-                                        padding: "8px 12px",
-                                        cursor: "pointer",
-                                        marginRight: "8px",
-                                    }}
+                                    style={viewButtonStyle}
                                 >
                                     View
                                 </button>
 
                                 <button
+                                    onClick={() => setAppointmentToEdit(appointment)}
+                                    style={editButtonStyle}
+                                >
+                                    Edit
+                                </button>
+
+                                <button
                                     onClick={() => setAppointmentToDelete(appointment)}
-                                    style={{
-                                        border: "none",
-                                        background: "#ef4444",
-                                        color: "white",
-                                        borderRadius: "8px",
-                                        padding: "8px 12px",
-                                        cursor: "pointer",
-                                    }}
+                                    style={deleteButtonStyle}
                                 >
                                     Delete
                                 </button>
@@ -175,6 +179,15 @@ function Appointments() {
                     patients={patients}
                     onClose={() => setIsFormOpen(false)}
                     onSubmit={handleCreateAppointment}
+                />
+            )}
+
+            {appointmentToEdit && (
+                <AppointmentForm
+                    patients={patients}
+                    appointment={appointmentToEdit}
+                    onClose={() => setAppointmentToEdit(null)}
+                    onSubmit={handleUpdateAppointment}
                 />
             )}
 
@@ -208,6 +221,35 @@ const thStyle = {
 const tdStyle = {
     padding: "14px",
     borderBottom: "1px solid #e5e7eb",
+};
+
+const viewButtonStyle = {
+    border: "none",
+    background: "#2563eb",
+    color: "white",
+    borderRadius: "8px",
+    padding: "8px 12px",
+    cursor: "pointer",
+    marginRight: "8px",
+};
+
+const editButtonStyle = {
+    border: "none",
+    background: "#f59e0b",
+    color: "white",
+    borderRadius: "8px",
+    padding: "8px 12px",
+    cursor: "pointer",
+    marginRight: "8px",
+};
+
+const deleteButtonStyle = {
+    border: "none",
+    background: "#ef4444",
+    color: "white",
+    borderRadius: "8px",
+    padding: "8px 12px",
+    cursor: "pointer",
 };
 
 export default Appointments;
