@@ -1,5 +1,6 @@
 import { useState } from "react";
 import PatientForm from "../components/PatientForm";
+import PatientDetail from "../components/PatientDetail";
 
 const patients = [
     {
@@ -20,8 +21,8 @@ const patients = [
 ];
 
 function Patients() {
-
     const [isFormOpen, setIsFormOpen] = useState(false);
+    const [selectedPatient, setSelectedPatient] = useState(null);
 
     return (
         <div>
@@ -85,7 +86,20 @@ function Patients() {
                         <tr key={patient.id}>
                             <td style={tdStyle}>{patient.fullName}</td>
                             <td style={tdStyle}>{patient.phone}</td>
-                            <td style={tdStyle}>View</td>
+                            <td style={tdStyle}>
+                                <button
+                                    onClick={() => setSelectedPatient(patient)}
+                                    style={{
+                                        border: "none",
+                                        background: "transparent",
+                                        color: "#2563eb",
+                                        fontWeight: "bold",
+                                        cursor: "pointer",
+                                    }}
+                                >
+                                    View
+                                </button>
+                            </td>
                         </tr>
                     ))}
                     </tbody>
@@ -94,6 +108,13 @@ function Patients() {
 
             {isFormOpen && (
                 <PatientForm onClose={() => setIsFormOpen(false)} />
+            )}
+
+            {selectedPatient && (
+                <PatientDetail
+                    patient={selectedPatient}
+                    onClose={() => setSelectedPatient(null)}
+                />
             )}
         </div>
     );
