@@ -1,18 +1,21 @@
 import { useEffect, useState } from "react";
 import PatientForm from "../components/PatientForm";
 import PatientDetail from "../components/PatientDetail";
-import { createPatient, getPatients } from "../api/patientApi";
+import DeleteConfirmDialog from "../components/DeleteConfirmDialog";
+import { createPatient, deletePatient, getPatients } from "../api/patientApi";
 
 function Patients() {
     const [patients, setPatients] = useState([]);
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [selectedPatient, setSelectedPatient] = useState(null);
+    const [patientToDelete, setPatientToDelete] = useState(null);
     const [error, setError] = useState("");
 
     async function loadPatients() {
         try {
             const data = await getPatients();
             setPatients(data);
+            setError("");
         } catch (e) {
             setError("Could not load patients.");
         }
@@ -29,6 +32,17 @@ function Patients() {
             await loadPatients();
         } catch (e) {
             setError("Could not create patient.");
+        }
+    }
+
+    async function handleConfirmDelete() {
+        try {
+            await deletePatient(patientToDelete.id);
+            setPatientToDelete(null);
+            await loadPatients();
+        } catch (e) {
+            setError(e.message);
+            setPatientToDelete(null);
         }
     }
 
@@ -74,6 +88,7 @@ function Patients() {
                     borderRadius: "16px",
                     padding: "20px",
                     boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
+                    overflowX: "auto",
                 }}
             >
                 <table
@@ -91,7 +106,7 @@ function Patients() {
                     >
                         <th style={thStyle}>Patient</th>
                         <th style={thStyle}>Phone</th>
-                        <th style={thStyle}>Detail</th>
+                        <th style={thStyle}>Action</th>
                     </tr>
                     </thead>
 
@@ -105,13 +120,29 @@ function Patients() {
                                     onClick={() => setSelectedPatient(patient)}
                                     style={{
                                         border: "none",
-                                        background: "transparent",
-                                        color: "#2563eb",
-                                        fontWeight: "bold",
+                                        background: "#2563eb",
+                                        color: "white",
+                                        borderRadius: "8px",
+                                        padding: "8px 12px",
                                         cursor: "pointer",
+                                        marginRight: "8px",
                                     }}
                                 >
                                     View
+                                </button>
+
+                                <button
+                                    onClick={() => setPatientToDelete(patient)}
+                                    style={{
+                                        border: "none",
+                                        background: "#ef4444",
+                                        color: "white",
+                                        borderRadius: "8px",
+                                        padding: "8px 12px",
+                                        cursor: "pointer",
+                                    }}
+                                >
+                                    Delete
                                 </button>
                             </td>
                         </tr>
@@ -137,6 +168,15 @@ function Patients() {
                 <PatientDetail
                     patient={selectedPatient}
                     onClose={() => setSelectedPatient(null)}
+                />
+            )}
+
+            {patientToDelete && (
+                <DeleteConfirmDialog
+                    title="Delete patient"
+                    message={`Are you sure you want to delete ${patientToDelete.fullName}?`}
+                    onCancel={() => setPatientToDelete(null)}
+                    onConfirm={handleConfirmDelete}
                 />
             )}
         </div>
