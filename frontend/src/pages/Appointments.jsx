@@ -1,12 +1,20 @@
 import { useEffect, useState } from "react";
 import AppointmentForm from "../components/AppointmentForm";
-import { createAppointment, getAppointments } from "../api/appointmentApi";
+import AppointmentDetail from "../components/AppointmentDetail";
+import DeleteConfirmDialog from "../components/DeleteConfirmDialog";
+import {
+    createAppointment,
+    deleteAppointment,
+    getAppointments,
+} from "../api/appointmentApi";
 import { getPatients } from "../api/patientApi";
 
 function Appointments() {
     const [appointments, setAppointments] = useState([]);
     const [patients, setPatients] = useState([]);
     const [isFormOpen, setIsFormOpen] = useState(false);
+    const [selectedAppointment, setSelectedAppointment] = useState(null);
+    const [appointmentToDelete, setAppointmentToDelete] = useState(null);
     const [error, setError] = useState("");
 
     async function loadData() {
@@ -16,6 +24,7 @@ function Appointments() {
 
             setAppointments(appointmentsData);
             setPatients(patientsData);
+            setError("");
         } catch (e) {
             setError("Could not load appointments.");
         }
@@ -37,6 +46,16 @@ function Appointments() {
             await loadData();
         } catch (e) {
             throw e;
+        }
+    }
+
+    async function handleConfirmDelete() {
+        try {
+            await deleteAppointment(appointmentToDelete.id);
+            setAppointmentToDelete(null);
+            await loadData();
+        } catch (e) {
+            setError("Could not delete appointment.");
         }
     }
 
@@ -94,6 +113,7 @@ function Appointments() {
                         <th style={thStyle}>To</th>
                         <th style={thStyle}>Patient</th>
                         <th style={thStyle}>Price</th>
+                        <th style={thStyle}>Action</th>
                     </tr>
                     </thead>
 
@@ -108,6 +128,36 @@ function Appointments() {
                                 {getPatientName(appointment.patientId)}
                             </td>
                             <td style={tdStyle}>${appointment.price}</td>
+                            <td style={tdStyle}>
+                                <button
+                                    onClick={() => setSelectedAppointment(appointment)}
+                                    style={{
+                                        border: "none",
+                                        background: "#2563eb",
+                                        color: "white",
+                                        borderRadius: "8px",
+                                        padding: "8px 12px",
+                                        cursor: "pointer",
+                                        marginRight: "8px",
+                                    }}
+                                >
+                                    View
+                                </button>
+
+                                <button
+                                    onClick={() => setAppointmentToDelete(appointment)}
+                                    style={{
+                                        border: "none",
+                                        background: "#ef4444",
+                                        color: "white",
+                                        borderRadius: "8px",
+                                        padding: "8px 12px",
+                                        cursor: "pointer",
+                                    }}
+                                >
+                                    Delete
+                                </button>
+                            </td>
                         </tr>
                     ))}
                     </tbody>
@@ -125,6 +175,25 @@ function Appointments() {
                     patients={patients}
                     onClose={() => setIsFormOpen(false)}
                     onSubmit={handleCreateAppointment}
+                />
+            )}
+
+            {selectedAppointment && (
+                <AppointmentDetail
+                    appointment={selectedAppointment}
+                    patientName={getPatientName(selectedAppointment.patientId)}
+                    onClose={() => setSelectedAppointment(null)}
+                />
+            )}
+
+            {appointmentToDelete && (
+                <DeleteConfirmDialog
+                    title="Delete appointment"
+                    message={`Are you sure you want to delete ${appointmentToDelete.type} for ${getPatientName(
+                        appointmentToDelete.patientId
+                    )}?`}
+                    onCancel={() => setAppointmentToDelete(null)}
+                    onConfirm={handleConfirmDelete}
                 />
             )}
         </div>
