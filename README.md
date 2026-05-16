@@ -1,134 +1,180 @@
-# Medical Visit Manager
+# Medical Visit Manager 🏥
 
-Modern full-stack web application for managing patients and medical appointments.
-
-The application allows administrators to manage patients, schedule medical visits, track appointment statuses, and view dashboard statistics.
+> INSERT YOUR GIF / SCREEN RECORDING HERE
 
 ---
 
-# Features
+# ✨ Overview
 
-## Patient Management
-- Create patient
-- Edit patient
-- Delete patient
-- View patient detail
-- Search patients by name or phone number
+Medical Visit Manager is a full-stack web application designed for managing patients and medical appointments in a modern and user-friendly way.
 
-## Appointment Management
-- Create appointment
-- Edit appointment
-- Delete appointment
-- View appointment detail
-- Filter appointments by:
-  - patient
-  - procedure type
-  - date
-  - status
+The system allows healthcare staff to:
 
-## Appointment Status System
-Appointments support:
-- Planned
-- Completed
-- Cancelled
+* manage patients,
+* create and edit appointments,
+* track appointment statuses,
+* search and filter records,
+* monitor upcoming visits,
+* and visualize statistics on a dashboard.
 
-Each status has its own color badge.
-
-## Dashboard
-- Total patients
-- Total appointments
-- Today appointments
-- Appointment status statistics
-- Pie chart by appointment type
-- Bar chart by appointment dates
-- Real-time European clocks
+The application was built as a university project using **React**, **Node.js**, and **Express**.
 
 ---
 
-# Technologies
+# 🚀 Features
+
+## 👤 Patient Management
+
+✅ Add new patients
+
+✅ Edit patient information
+
+✅ Delete patients
+
+✅ Prevent deleting patients with existing appointments
+
+✅ Search patients by name or phone number
+
+✅ View patient details in a modal window
+
+---
+
+## 📅 Appointment Management
+
+✅ Create appointments
+
+✅ Edit appointments
+
+✅ Delete appointments
+
+✅ View appointment details
+
+✅ Appointment statuses:
+
+* Planned
+* Completed
+* Cancelled
+
+✅ Search appointments
+
+✅ Filter appointments by:
+
+* patient/procedure name
+* date
+* status
+
+✅ Smart patient search inside appointment form
+(type patient name and select from dropdown)
+
+---
+
+## 📊 Dashboard
+
+The dashboard provides real-time visual statistics:
+
+✅ Total patients
+
+✅ Total appointments
+
+✅ Planned / Completed / Cancelled statistics
+
+✅ Pie chart for appointment types
+
+✅ Appointment activity chart
+
+✅ Prague live clock
+
+✅ European city clocks
+
+---
+
+# 🛠 Technologies Used
 
 ## Frontend
-- React
-- JavaScript
-- CSS-in-JS styling
+
+* React
+* Vite
+* JavaScript
+* CSS
 
 ## Backend
-- Node.js
-- Express.js
+
+* Node.js
+* Express.js
 
 ## Data Storage
-- JSON files
+
+* JSON files (`patients.json`, `appointments.json`)
 
 ---
 
-# Project Structure
+# 📁 Project Structure
 
 ```text
-backend/
-frontend/
-data/
+Medical-visit-manager/
+│
+├── dao/
+│   ├── appointmentDao.js
+│   └── patientDao.js
+│
+├── data/
+│   ├── appointments.json
+│   └── patients.json
+│
+├── routes/
+│   ├── appointmentRoutes.js
+│   └── patientRoutes.js
+│
+├── frontend/
+│   ├── src/
+│   │   ├── api/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   └── App.jsx
+│   │
+│   └── package.json
+│
+├── server.js
+├── package.json
+└── README.md
 ```
 
 ---
 
-# Entities
+# ⚙️ Installation & Setup
 
-## Patient
-
-```json
-{
-  "id": "1",
-  "fullName": "Anna Novak",
-  "phone": "+420771293480",
-  "dateOfBirth": "1992-05-14",
-  "address": "Prague",
-  "note": "VIP client"
-}
-```
-
-## Appointment
-
-```json
-{
-  "id": "1",
-  "patientId": "1",
-  "type": "IV drip",
-  "date": "2026-05-20",
-  "from": "12:00",
-  "to": "13:00",
-  "price": 1500,
-  "status": "Planned",
-  "note": "Immune support"
-}
-```
-
----
-
-# Installation
-
-## 1. Clone repository
+## 1️⃣ Clone repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/02ionova/Medical-visit-manager.git
 ```
 
 ---
 
-# Backend Setup
+## 2️⃣ Install backend dependencies
 
-## Enter backend folder
-
-```bash
-cd backend
-```
-
-## Install dependencies
+From project root:
 
 ```bash
 npm install
 ```
 
+---
+
+## 3️⃣ Install frontend dependencies
+
+```bash
+cd frontend
+npm install
+```
+
+---
+
+# ▶️ Running the Project
+
 ## Start backend server
+
+From project root:
 
 ```bash
 npm start
@@ -142,23 +188,12 @@ http://localhost:3000
 
 ---
 
-# Frontend Setup
+## Start frontend
 
-## Enter frontend folder
+Open second terminal:
 
 ```bash
 cd frontend
-```
-
-## Install dependencies
-
-```bash
-npm install
-```
-
-## Start frontend
-
-```bash
 npm run dev
 ```
 
@@ -170,30 +205,115 @@ http://localhost:5173
 
 ---
 
-# Screenshots
+# 🧠 Business Logic & Validation
 
-## Dashboard
-- Statistics cards
-- Status overview
-- Charts
-- Analog clocks
+The application includes several validation rules:
 
-## Patients
-- Patient management table
-- Search functionality
-- Detail modal
+✅ Appointment end time must be after start time
 
-## Appointments
-- Appointment filtering
-- Status badges
-- Appointment detail modal
+✅ Required fields validation
+
+✅ Patients with appointments cannot be deleted
+
+✅ Search and filtering functionality
+
+✅ Appointment status management
 
 ---
 
-# Author
+# 📦 Seed Data
 
-Natalia Ionova
+The system already includes:
 
-Unicorn University
+✅ 50 patients
 
-2026
+✅ Multiple appointment types
+
+✅ Past and future appointments
+
+✅ Planned / Completed / Cancelled statuses
+
+Appointment categories include:
+
+* IV drip
+* Injection
+* Blood test
+* Wound care
+* Health monitoring
+
+---
+
+# 🎨 UI & UX Improvements
+
+The application includes:
+
+✨ Modern dashboard
+
+✨ Responsive modal windows
+
+✨ Searchable patient selection
+
+✨ Improved tables and spacing
+
+✨ Status badges with colors
+
+✨ Clean modern interface
+
+✨ Interactive charts
+
+---
+
+# 📸 Screenshots
+
+## Dashboard
+
+> INSERT SCREENSHOT HERE
+
+---
+
+## Patients Page
+
+> INSERT SCREENSHOT HERE
+
+---
+
+## Patient Form
+
+> INSERT SCREENSHOT HERE
+
+---
+
+## Appointments Page
+
+> INSERT SCREENSHOT HERE
+
+---
+
+## Appointment Form
+
+> INSERT SCREENSHOT HERE
+
+---
+
+# 🔮 Future Improvements
+
+Possible future upgrades:
+
+* Database integration (MongoDB / PostgreSQL)
+* Authentication & login
+* Nurse management
+* Calendar integration
+* Notifications
+* Mobile responsiveness
+* Dark mode
+* Export to PDF
+* Real scheduling system
+
+---
+
+# 👩‍💻 Author
+
+**Natalia Ionova**
+
+University project — Medical Visit Manager
+Built with React + Node.js + Express
