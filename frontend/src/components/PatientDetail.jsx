@@ -1,30 +1,22 @@
+import { useEffect, useState } from "react";
+import { getAppointmentsByPatient } from "../api/appointmentApi";
+
 function PatientDetail({ patient, onClose }) {
-    const appointments = [
-        {
-            id: "1",
-            type: "IV drip",
-            date: "2025-04-05",
-            from: "09:30",
-            to: "10:00",
-            price: 500,
-        },
-        {
-            id: "2",
-            type: "Injection",
-            date: "2025-05-09",
-            from: "10:00",
-            to: "10:30",
-            price: 200,
-        },
-        {
-            id: "3",
-            type: "Blood test",
-            date: "2025-08-11",
-            from: "19:00",
-            to: "19:10",
-            price: 100,
-        },
-    ];
+    const [appointments, setAppointments] = useState([]);
+    const [error, setError] = useState("");
+
+    useEffect(() => {
+        async function loadAppointments() {
+            try {
+                const data = await getAppointmentsByPatient(patient.id);
+                setAppointments(data);
+            } catch (e) {
+                setError("Could not load patient appointments.");
+            }
+        }
+
+        loadAppointments();
+    }, [patient.id]);
 
     return (
         <div style={overlayStyle}>
@@ -42,17 +34,19 @@ function PatientDetail({ patient, onClose }) {
                         <h3>{patient.phone}</h3>
 
                         <p>Date of birth</p>
-                        <h3>1989-03-27</h3>
+                        <h3>{patient.dateOfBirth}</h3>
 
                         <p>Address</p>
-                        <h3>Štěpánská 612/16, 110 00 Nové Město</h3>
+                        <h3>{patient.address}</h3>
 
                         <p>Note</p>
-                        <h3>Allergic to nuts</h3>
+                        <h3>{patient.note || "No note"}</h3>
                     </div>
 
                     <div style={appointmentsCardStyle}>
                         <h2>Appointments</h2>
+
+                        {error && <p style={{ color: "red" }}>{error}</p>}
 
                         <table style={{ width: "100%", borderCollapse: "collapse" }}>
                             <thead>
@@ -77,6 +71,12 @@ function PatientDetail({ patient, onClose }) {
                             ))}
                             </tbody>
                         </table>
+
+                        {appointments.length === 0 && (
+                            <p style={{ color: "#6b7280", marginTop: "20px" }}>
+                                This patient has no appointments.
+                            </p>
+                        )}
                     </div>
                 </div>
             </div>

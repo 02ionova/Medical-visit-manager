@@ -6,6 +6,12 @@ export async function getAppointments() {
     return data.itemList;
 }
 
+export async function getAppointmentsByPatient(patientId) {
+    const response = await fetch(`${API_URL}/patient/${patientId}`);
+    const data = await response.json();
+    return data.itemList;
+}
+
 export async function createAppointment(appointment) {
     const response = await fetch(API_URL, {
         method: "POST",
