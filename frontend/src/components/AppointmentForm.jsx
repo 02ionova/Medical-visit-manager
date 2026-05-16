@@ -1,53 +1,153 @@
-function AppointmentForm({ onClose }) {
+import { useState } from "react";
+
+function AppointmentForm({ patients, onClose, onSubmit }) {
+    const [formData, setFormData] = useState({
+        date: "",
+        from: "",
+        to: "",
+        type: "",
+        price: "",
+        note: "",
+        patientId: "",
+    });
+
+    const [error, setError] = useState("");
+
+    function handleChange(event) {
+        const { name, value } = event.target;
+
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    }
+
+    async function handleSubmit(event) {
+        event.preventDefault();
+        setError("");
+
+        try {
+            await onSubmit({
+                ...formData,
+                price: Number(formData.price),
+            });
+        } catch (e) {
+            setError(e.message);
+        }
+    }
+
     return (
         <div style={overlayStyle}>
-            <div style={modalStyle}>
+            <form style={modalStyle} onSubmit={handleSubmit}>
                 <h2>New Appointment</h2>
 
                 <div style={formGridStyle}>
                     <label>
                         Date of appointment
-                        <input style={inputStyle} type="date" />
+                        <input
+                            name="date"
+                            value={formData.date}
+                            onChange={handleChange}
+                            style={inputStyle}
+                            type="date"
+                            required
+                        />
                     </label>
 
                     <label>
                         Time From
-                        <input style={inputStyle} type="time" />
+                        <input
+                            name="from"
+                            value={formData.from}
+                            onChange={handleChange}
+                            style={inputStyle}
+                            type="time"
+                            required
+                        />
                     </label>
 
                     <label>
                         Time To
-                        <input style={inputStyle} type="time" />
+                        <input
+                            name="to"
+                            value={formData.to}
+                            onChange={handleChange}
+                            style={inputStyle}
+                            type="time"
+                            required
+                        />
                     </label>
 
                     <label>
                         Type
-                        <input style={inputStyle} placeholder="IV drip, Injection, etc" />
+                        <input
+                            name="type"
+                            value={formData.type}
+                            onChange={handleChange}
+                            style={inputStyle}
+                            placeholder="IV drip, Injection, etc"
+                            required
+                        />
                     </label>
 
                     <label>
                         Price
-                        <input style={inputStyle} type="number" placeholder="500" />
+                        <input
+                            name="price"
+                            value={formData.price}
+                            onChange={handleChange}
+                            style={inputStyle}
+                            type="number"
+                            placeholder="500"
+                            required
+                        />
                     </label>
 
                     <label>
-                        Patient name
-                        <input style={inputStyle} placeholder="Patient name" />
+                        Patient
+                        <select
+                            name="patientId"
+                            value={formData.patientId}
+                            onChange={handleChange}
+                            style={inputStyle}
+                            required
+                        >
+                            <option value="">Select patient</option>
+                            {patients.map((patient) => (
+                                <option key={patient.id} value={patient.id}>
+                                    {patient.fullName}
+                                </option>
+                            ))}
+                        </select>
                     </label>
                 </div>
 
                 <label>
                     Note
-                    <textarea style={textareaStyle} placeholder="Additional note" />
+                    <textarea
+                        name="note"
+                        value={formData.note}
+                        onChange={handleChange}
+                        style={textareaStyle}
+                        placeholder="Additional note"
+                    />
                 </label>
 
+                {error && (
+                    <p style={{ color: "red", marginTop: "12px" }}>
+                        {error}
+                    </p>
+                )}
+
                 <div style={footerStyle}>
-                    <button style={cancelButtonStyle} onClick={onClose}>
+                    <button type="button" style={cancelButtonStyle} onClick={onClose}>
                         Cancel
                     </button>
-                    <button style={createButtonStyle}>Create</button>
+                    <button type="submit" style={createButtonStyle}>
+                        Create
+                    </button>
                 </div>
-            </div>
+            </form>
         </div>
     );
 }

@@ -1,51 +1,54 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AppointmentForm from "../components/AppointmentForm";
-
-const appointments = [
-    {
-        id: "1",
-        type: "IV drip",
-        date: "2025-04-05",
-        from: "09:30",
-        to: "10:00",
-        patient: "Anna Novak",
-        price: 500,
-    },
-    {
-        id: "2",
-        type: "Injection",
-        date: "2025-04-07",
-        from: "10:00",
-        to: "10:30",
-        patient: "John Smith",
-        price: 200,
-    },
-    {
-        id: "3",
-        type: "Blood test",
-        date: "2025-04-11",
-        from: "19:00",
-        to: "19:10",
-        patient: "Petra Svobodova",
-        price: 100,
-    },
-    {
-        id: "4",
-        type: "Check-up",
-        date: "2025-04-15",
-        from: "11:30",
-        to: "12:00",
-        patient: "Martin Dvorak",
-        price: 800,
-    },
-];
+import { createAppointment, getAppointments } from "../api/appointmentApi";
+import { getPatients } from "../api/patientApi";
 
 function Appointments() {
+    const [appointments, setAppointments] = useState([]);
+    const [patients, setPatients] = useState([]);
     const [isFormOpen, setIsFormOpen] = useState(false);
+    const [error, setError] = useState("");
+
+    async function loadData() {
+        try {
+            const appointmentsData = await getAppointments();
+            const patientsData = await getPatients();
+
+            setAppointments(appointmentsData);
+            setPatients(patientsData);
+        } catch (e) {
+            setError("Could not load appointments.");
+        }
+    }
+
+    useEffect(() => {
+        loadData();
+    }, []);
+
+    function getPatientName(patientId) {
+        const patient = patients.find((p) => p.id === patientId);
+        return patient ? patient.fullName : "Unknown patient";
+    }
+
+    async function handleCreateAppointment(appointment) {
+        try {
+            await createAppointment(appointment);
+            setIsFormOpen(false);
+            await loadData();
+        } catch (e) {
+            throw e;
+        }
+    }
 
     return (
         <div>
-            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "20px" }}>
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    marginBottom: "20px",
+                }}
+            >
                 <div>
                     <h1>All appointments</h1>
                     <p>Manage medical visits and planned procedures.</p>
@@ -67,12 +70,19 @@ function Appointments() {
                 </button>
             </div>
 
+            {error && (
+                <p style={{ color: "red", marginBottom: "12px" }}>
+                    {error}
+                </p>
+            )}
+
             <div
                 style={{
                     background: "white",
                     borderRadius: "16px",
                     padding: "20px",
                     boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
+                    overflowX: "auto",
                 }}
             >
                 <table style={{ width: "100%", borderCollapse: "collapse" }}>
@@ -94,16 +104,28 @@ function Appointments() {
                             <td style={tdStyle}>{appointment.date}</td>
                             <td style={tdStyle}>{appointment.from}</td>
                             <td style={tdStyle}>{appointment.to}</td>
-                            <td style={tdStyle}>{appointment.patient}</td>
+                            <td style={tdStyle}>
+                                {getPatientName(appointment.patientId)}
+                            </td>
                             <td style={tdStyle}>${appointment.price}</td>
                         </tr>
                     ))}
                     </tbody>
                 </table>
+
+                {appointments.length === 0 && (
+                    <p style={{ color: "#6b7280", padding: "20px" }}>
+                        No appointments found.
+                    </p>
+                )}
             </div>
 
             {isFormOpen && (
-                <AppointmentForm onClose={() => setIsFormOpen(false)} />
+                <AppointmentForm
+                    patients={patients}
+                    onClose={() => setIsFormOpen(false)}
+                    onSubmit={handleCreateAppointment}
+                />
             )}
         </div>
     );
