@@ -31,6 +31,18 @@ function Dashboard() {
         (appointment) => appointment.date === today
     );
 
+    const plannedCount = appointments.filter(
+        (appointment) => (appointment.status || "Planned") === "Planned"
+    ).length;
+
+    const completedCount = appointments.filter(
+        (appointment) => appointment.status === "Completed"
+    ).length;
+
+    const cancelledCount = appointments.filter(
+        (appointment) => appointment.status === "Cancelled"
+    ).length;
+
     const appointmentTypes = appointments.reduce((acc, appointment) => {
         acc[appointment.type] = (acc[appointment.type] || 0) + 1;
         return acc;
@@ -52,6 +64,12 @@ function Dashboard() {
                     title="Today Appointments"
                     value={todayAppointments.length}
                 />
+            </div>
+
+            <div style={statusGridStyle}>
+                <StatusCard title="Planned" value={plannedCount} color="#2563eb" />
+                <StatusCard title="Completed" value={completedCount} color="#10b981" />
+                <StatusCard title="Cancelled" value={cancelledCount} color="#ef4444" />
             </div>
 
             <div style={mainGridStyle}>
@@ -150,6 +168,24 @@ function DashboardCard({ title, value }) {
         <div style={cardStyle}>
             <p style={{ color: "#64748b", marginBottom: "10px" }}>{title}</p>
             <h2 style={{ fontSize: "36px", margin: 0 }}>{value}</h2>
+        </div>
+    );
+}
+
+function StatusCard({ title, value, color }) {
+    return (
+        <div style={statusCardStyle}>
+            <div
+                style={{
+                    ...statusDotStyle,
+                    background: color,
+                }}
+            />
+
+            <div>
+                <p style={{ color: "#64748b", marginBottom: "8px" }}>{title}</p>
+                <h2 style={{ fontSize: "30px", margin: 0, color }}>{value}</h2>
+            </div>
         </div>
     );
 }
@@ -330,6 +366,13 @@ const cardGridStyle = {
     display: "grid",
     gridTemplateColumns: "repeat(3, 1fr)",
     gap: "20px",
+    marginBottom: "20px",
+};
+
+const statusGridStyle = {
+    display: "grid",
+    gridTemplateColumns: "repeat(3, 1fr)",
+    gap: "20px",
     marginBottom: "24px",
 };
 
@@ -344,6 +387,22 @@ const cardStyle = {
     borderRadius: "20px",
     padding: "24px",
     boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
+};
+
+const statusCardStyle = {
+    background: "white",
+    borderRadius: "20px",
+    padding: "22px",
+    display: "flex",
+    alignItems: "center",
+    gap: "16px",
+    boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
+};
+
+const statusDotStyle = {
+    width: "18px",
+    height: "18px",
+    borderRadius: "50%",
 };
 
 const panelStyle = {

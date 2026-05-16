@@ -1,106 +1,87 @@
 import { useEffect, useState } from "react";
-import {
-    deletePatient,
-    getPatients,
-} from "../api/patientApi";
-
-import {
-    getAppointmentsByPatient,
-} from "../api/appointmentApi";
-
 import PatientForm from "../components/PatientForm";
 import PatientDetail from "../components/PatientDetail";
 import DeleteConfirmDialog from "../components/DeleteConfirmDialog";
+import {
+    createPatient,
+    deletePatient,
+    getPatients,
+    updatePatient,
+} from "../api/patientApi";
 
 function Patients() {
     const [patients, setPatients] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    const [showForm, setShowForm] = useState(false);
+    const [isFormOpen, setIsFormOpen] = useState(false);
     const [selectedPatient, setSelectedPatient] = useState(null);
-
-    const [detailPatient, setDetailPatient] = useState(null);
-
-    const [deletePatientData, setDeletePatientData] = useState(null);
-
+    const [patientToEdit, setPatientToEdit] = useState(null);
+    const [patientToDelete, setPatientToDelete] = useState(null);
+    const [search, setSearch] = useState("");
     const [error, setError] = useState("");
 
-    const [search, setSearch] = useState("");
+    async function loadPatients() {
+        try {
+            const data = await getPatients();
+            setPatients(data);
+            setError("");
+        } catch (e) {
+            setError("Could not load patients.");
+        }
+    }
 
     useEffect(() => {
         loadPatients();
     }, []);
 
-    async function loadPatients() {
-        try {
-            setLoading(true);
-
-            const data = await getPatients();
-
-            setPatients(data);
-        } catch (e) {
-            setError("Failed to load patients.");
-        } finally {
-            setLoading(false);
-        }
-    }
-
-    async function handleDelete(patient) {
-        try {
-            const appointments = await getAppointmentsByPatient(patient.id);
-
-            if (appointments.length > 0) {
-                alert(
-                    "This patient cannot be deleted because appointments already exist."
-                );
-                return;
-            }
-
-            await deletePatient(patient.id);
-
-            await loadPatients();
-
-            setDeletePatientData(null);
-        } catch (e) {
-            setError("Failed to delete patient.");
-        }
-    }
-
     const filteredPatients = patients.filter((patient) => {
-        const fullName = patient.fullName?.toLowerCase() || "";
+        const name = patient.fullName?.toLowerCase() || "";
         const phone = patient.phone?.toLowerCase() || "";
+        const query = search.toLowerCase();
 
-        return (
-            fullName.includes(search.toLowerCase()) ||
-            phone.includes(search.toLowerCase())
-        );
+        return name.includes(query) || phone.includes(query);
     });
+
+    async function handleCreatePatient(patient) {
+        try {
+            await createPatient(patient);
+            setIsFormOpen(false);
+            await loadPatients();
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    async function handleUpdatePatient(patient) {
+        try {
+            await updatePatient(patientToEdit.id, patient);
+            setPatientToEdit(null);
+            await loadPatients();
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    async function handleConfirmDelete() {
+        try {
+            await deletePatient(patientToDelete.id);
+            setPatientToDelete(null);
+            await loadPatients();
+        } catch (e) {
+            setError(e.message);
+            setPatientToDelete(null);
+        }
+    }
 
     return (
         <div>
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    marginBottom: "24px",
-                }}
-            >
+            <div style={pageHeaderStyle}>
                 <div>
                     <h1 style={{ marginBottom: "8px" }}>All patients</h1>
-
                     <p style={{ color: "#64748b" }}>
                         Manage patients and view their details.
                     </p>
                 </div>
 
-                <button
-                    onClick={() => {
-                        setSelectedPatient(null);
-                        setShowForm(true);
-                    }}
-                    style={addButtonStyle}
-                >
+                <button onClick={() => setIsFormOpen(true)} style={addButtonStyle}>
                     + Add Patient
                 </button>
             </div>
@@ -116,114 +97,101 @@ function Patients() {
             </div>
 
             {error && (
-                <p style={{ color: "#ef4444", marginBottom: "16px" }}>
-                    {error}
-                </p>
+                <p style={{ color: "#ef4444", marginBottom: "12px" }}>{error}</p>
             )}
 
             <div style={tableContainerStyle}>
-                {loading ? (
-                    <p>Loading patients...</p>
-                ) : filteredPatients.length === 0 ? (
-                    <div style={emptyStateStyle}>
-                        No patients found.
-                    </div>
-                ) : (
-                    <table style={tableStyle}>
-                        <thead>
-                        <tr style={{ background: "#2563eb", color: "white" }}>
-                            <th style={thStyle}>Patient</th>
-                            <th style={thStyle}>Phone</th>
-                            <th style={thStyle}>Action</th>
+                <table style={tableStyle}>
+                    <thead>
+                    <tr style={{ background: "#2563eb", color: "white" }}>
+                        <th style={{ ...thStyle, width: "40%" }}>Patient</th>
+                        <th style={{ ...thStyle, width: "30%" }}>Phone</th>
+                        <th style={{ ...thStyle, width: "30%" }}>Action</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {filteredPatients.map((patient) => (
+                        <tr key={patient.id}>
+                            <td style={tdStyle}>
+                                <strong>{patient.fullName}</strong>
+                            </td>
+
+                            <td style={tdStyle}>{patient.phone}</td>
+
+                            <td style={tdStyle}>
+                                <div style={actionContainerStyle}>
+                                    <button
+                                        style={viewButtonStyle}
+                                        onClick={() => setSelectedPatient(patient)}
+                                    >
+                                        View
+                                    </button>
+
+                                    <button
+                                        style={editButtonStyle}
+                                        onClick={() => setPatientToEdit(patient)}
+                                    >
+                                        Edit
+                                    </button>
+
+                                    <button
+                                        style={deleteButtonStyle}
+                                        onClick={() => setPatientToDelete(patient)}
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            </td>
                         </tr>
-                        </thead>
+                    ))}
+                    </tbody>
+                </table>
 
-                        <tbody>
-                        {filteredPatients.map((patient) => (
-                            <tr key={patient.id}>
-                                <td style={tdStyle}>{patient.fullName}</td>
-
-                                <td style={tdStyle}>{patient.phone}</td>
-
-                                <td style={tdStyle}>
-                                    <div style={{ display: "flex", gap: "10px" }}>
-                                        <button
-                                            style={viewButtonStyle}
-                                            onClick={() => setDetailPatient(patient)}
-                                        >
-                                            View
-                                        </button>
-
-                                        <button
-                                            style={editButtonStyle}
-                                            onClick={() => {
-                                                setSelectedPatient(patient);
-                                                setShowForm(true);
-                                            }}
-                                        >
-                                            Edit
-                                        </button>
-
-                                        <button
-                                            style={deleteButtonStyle}
-                                            onClick={() =>
-                                                setDeletePatientData(patient)
-                                            }
-                                        >
-                                            Delete
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                        </tbody>
-                    </table>
+                {filteredPatients.length === 0 && (
+                    <div style={emptyStateStyle}>No patients found.</div>
                 )}
             </div>
 
-            {showForm && (
+            {isFormOpen && (
                 <PatientForm
-                    patient={selectedPatient}
-                    onClose={() => {
-                        setShowForm(false);
-                        setSelectedPatient(null);
-                    }}
-                    onSaved={() => {
-                        loadPatients();
-                        setShowForm(false);
-                        setSelectedPatient(null);
-                    }}
+                    onClose={() => setIsFormOpen(false)}
+                    onSubmit={handleCreatePatient}
                 />
             )}
 
-            {detailPatient && (
+            {patientToEdit && (
+                <PatientForm
+                    patient={patientToEdit}
+                    onClose={() => setPatientToEdit(null)}
+                    onSubmit={handleUpdatePatient}
+                />
+            )}
+
+            {selectedPatient && (
                 <PatientDetail
-                    patient={detailPatient}
-                    onClose={() => setDetailPatient(null)}
+                    patient={selectedPatient}
+                    onClose={() => setSelectedPatient(null)}
                 />
             )}
 
-            {deletePatientData && (
+            {patientToDelete && (
                 <DeleteConfirmDialog
                     title="Delete patient"
-                    message={`Are you sure you want to delete ${deletePatientData.fullName}?`}
-                    onCancel={() => setDeletePatientData(null)}
-                    onConfirm={() => handleDelete(deletePatientData)}
+                    message={`Are you sure you want to delete ${patientToDelete.fullName}?`}
+                    onCancel={() => setPatientToDelete(null)}
+                    onConfirm={handleConfirmDelete}
                 />
             )}
         </div>
     );
 }
 
-const addButtonStyle = {
-    background: "#2563eb",
-    color: "white",
-    border: "none",
-    borderRadius: "12px",
-    padding: "14px 20px",
-    fontWeight: "600",
-    cursor: "pointer",
-    fontSize: "14px",
+const pageHeaderStyle = {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "24px",
 };
 
 const searchContainerStyle = {
@@ -242,11 +210,23 @@ const searchInputStyle = {
     boxShadow: "0 4px 14px rgba(0,0,0,0.04)",
 };
 
+const addButtonStyle = {
+    background: "#2563eb",
+    color: "white",
+    border: "none",
+    borderRadius: "12px",
+    padding: "14px 20px",
+    fontWeight: "600",
+    cursor: "pointer",
+    fontSize: "14px",
+};
+
 const tableContainerStyle = {
     background: "white",
     borderRadius: "24px",
     padding: "28px",
     boxShadow: "0 12px 35px rgba(0,0,0,0.08)",
+    overflowX: "auto",
 };
 
 const tableStyle = {
@@ -263,6 +243,12 @@ const thStyle = {
 const tdStyle = {
     padding: "18px 16px",
     borderBottom: "1px solid #e5e7eb",
+};
+
+const actionContainerStyle = {
+    display: "flex",
+    gap: "10px",
+    flexWrap: "wrap",
 };
 
 const emptyStateStyle = {
