@@ -13,10 +13,15 @@ import { getPatients } from "../api/patientApi";
 function Appointments() {
     const [appointments, setAppointments] = useState([]);
     const [patients, setPatients] = useState([]);
+
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [selectedAppointment, setSelectedAppointment] = useState(null);
     const [appointmentToEdit, setAppointmentToEdit] = useState(null);
     const [appointmentToDelete, setAppointmentToDelete] = useState(null);
+
+    const [search, setSearch] = useState("");
+    const [dateFilter, setDateFilter] = useState("");
+
     const [error, setError] = useState("");
 
     async function loadData() {
@@ -40,6 +45,20 @@ function Appointments() {
         const patient = patients.find((p) => p.id === patientId);
         return patient ? patient.fullName : "Unknown patient";
     }
+
+    const filteredAppointments = appointments.filter((appointment) => {
+        const patientName = getPatientName(appointment.patientId).toLowerCase();
+        const type = appointment.type?.toLowerCase() || "";
+
+        const matchesSearch =
+            patientName.includes(search.toLowerCase()) ||
+            type.includes(search.toLowerCase());
+
+        const matchesDate =
+            !dateFilter || appointment.date === dateFilter;
+
+        return matchesSearch && matchesDate;
+    });
 
     async function handleCreateAppointment(appointment) {
         try {
@@ -73,50 +92,57 @@ function Appointments() {
 
     return (
         <div>
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    marginBottom: "20px",
-                }}
-            >
+            <div style={pageHeaderStyle}>
                 <div>
-                    <h1>All appointments</h1>
-                    <p>Manage medical visits and planned procedures.</p>
+                    <h1 style={{ marginBottom: "8px" }}>All appointments</h1>
+                    <p style={{ color: "#64748b" }}>
+                        Manage medical visits and planned procedures.
+                    </p>
                 </div>
 
                 <button
                     onClick={() => setIsFormOpen(true)}
-                    style={{
-                        background: "#2563eb",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "10px",
-                        padding: "12px 18px",
-                        fontWeight: "bold",
-                        cursor: "pointer",
-                    }}
+                    style={addButtonStyle}
                 >
                     + Add Appointment
                 </button>
             </div>
 
+            <div style={filterBarStyle}>
+                <input
+                    type="text"
+                    placeholder="Search by patient or procedure type..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    style={searchInputStyle}
+                />
+
+                <input
+                    type="date"
+                    value={dateFilter}
+                    onChange={(e) => setDateFilter(e.target.value)}
+                    style={dateInputStyle}
+                />
+
+                <button
+                    onClick={() => {
+                        setSearch("");
+                        setDateFilter("");
+                    }}
+                    style={clearButtonStyle}
+                >
+                    Clear filters
+                </button>
+            </div>
+
             {error && (
-                <p style={{ color: "red", marginBottom: "12px" }}>
+                <p style={{ color: "#ef4444", marginBottom: "12px" }}>
                     {error}
                 </p>
             )}
 
-            <div
-                style={{
-                    background: "white",
-                    borderRadius: "16px",
-                    padding: "20px",
-                    boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
-                    overflowX: "auto",
-                }}
-            >
-                <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <div style={tableContainerStyle}>
+                <table style={tableStyle}>
                     <thead>
                     <tr style={{ background: "#2563eb", color: "white" }}>
                         <th style={thStyle}>Type</th>
@@ -130,7 +156,7 @@ function Appointments() {
                     </thead>
 
                     <tbody>
-                    {appointments.map((appointment) => (
+                    {filteredAppointments.map((appointment) => (
                         <tr key={appointment.id}>
                             <td style={tdStyle}>{appointment.type}</td>
                             <td style={tdStyle}>{appointment.date}</td>
@@ -141,36 +167,38 @@ function Appointments() {
                             </td>
                             <td style={tdStyle}>${appointment.price}</td>
                             <td style={tdStyle}>
-                                <button
-                                    onClick={() => setSelectedAppointment(appointment)}
-                                    style={viewButtonStyle}
-                                >
-                                    View
-                                </button>
+                                <div style={{ display: "flex", gap: "10px" }}>
+                                    <button
+                                        onClick={() => setSelectedAppointment(appointment)}
+                                        style={viewButtonStyle}
+                                    >
+                                        View
+                                    </button>
 
-                                <button
-                                    onClick={() => setAppointmentToEdit(appointment)}
-                                    style={editButtonStyle}
-                                >
-                                    Edit
-                                </button>
+                                    <button
+                                        onClick={() => setAppointmentToEdit(appointment)}
+                                        style={editButtonStyle}
+                                    >
+                                        Edit
+                                    </button>
 
-                                <button
-                                    onClick={() => setAppointmentToDelete(appointment)}
-                                    style={deleteButtonStyle}
-                                >
-                                    Delete
-                                </button>
+                                    <button
+                                        onClick={() => setAppointmentToDelete(appointment)}
+                                        style={deleteButtonStyle}
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                     ))}
                     </tbody>
                 </table>
 
-                {appointments.length === 0 && (
-                    <p style={{ color: "#6b7280", padding: "20px" }}>
+                {filteredAppointments.length === 0 && (
+                    <div style={emptyStateStyle}>
                         No appointments found.
-                    </p>
+                    </div>
                 )}
             </div>
 
@@ -213,43 +241,120 @@ function Appointments() {
     );
 }
 
+const pageHeaderStyle = {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "24px",
+};
+
+const filterBarStyle = {
+    display: "flex",
+    gap: "14px",
+    marginBottom: "20px",
+    alignItems: "center",
+};
+
+const searchInputStyle = {
+    width: "100%",
+    maxWidth: "420px",
+    padding: "14px 16px",
+    borderRadius: "14px",
+    border: "1px solid #dbeafe",
+    background: "white",
+    fontSize: "15px",
+    outline: "none",
+    boxShadow: "0 4px 14px rgba(0,0,0,0.04)",
+};
+
+const dateInputStyle = {
+    padding: "14px 16px",
+    borderRadius: "14px",
+    border: "1px solid #dbeafe",
+    background: "white",
+    fontSize: "15px",
+    outline: "none",
+};
+
+const clearButtonStyle = {
+    padding: "14px 18px",
+    border: "none",
+    borderRadius: "14px",
+    background: "#e2e8f0",
+    color: "#1e293b",
+    fontWeight: "600",
+    cursor: "pointer",
+};
+
+const addButtonStyle = {
+    background: "#2563eb",
+    color: "white",
+    border: "none",
+    borderRadius: "12px",
+    padding: "14px 20px",
+    fontWeight: "600",
+    cursor: "pointer",
+    fontSize: "14px",
+};
+
+const tableContainerStyle = {
+    background: "white",
+    borderRadius: "24px",
+    padding: "28px",
+    boxShadow: "0 12px 35px rgba(0,0,0,0.08)",
+    overflowX: "auto",
+};
+
+const tableStyle = {
+    width: "100%",
+    borderCollapse: "collapse",
+};
+
 const thStyle = {
     textAlign: "left",
-    padding: "14px",
+    padding: "16px",
+    fontWeight: "600",
 };
 
 const tdStyle = {
-    padding: "14px",
+    padding: "18px 16px",
     borderBottom: "1px solid #e5e7eb",
 };
 
+const emptyStateStyle = {
+    padding: "40px",
+    textAlign: "center",
+    color: "#64748b",
+};
+
 const viewButtonStyle = {
-    border: "none",
     background: "#2563eb",
     color: "white",
-    borderRadius: "8px",
-    padding: "8px 12px",
+    border: "none",
+    borderRadius: "10px",
+    padding: "10px 14px",
     cursor: "pointer",
-    marginRight: "8px",
+    fontWeight: "600",
 };
 
 const editButtonStyle = {
-    border: "none",
     background: "#f59e0b",
     color: "white",
-    borderRadius: "8px",
-    padding: "8px 12px",
+    border: "none",
+    borderRadius: "10px",
+    padding: "10px 14px",
     cursor: "pointer",
-    marginRight: "8px",
+    fontWeight: "600",
 };
 
 const deleteButtonStyle = {
-    border: "none",
     background: "#ef4444",
     color: "white",
-    borderRadius: "8px",
-    padding: "8px 12px",
+    border: "none",
+    borderRadius: "10px",
+    padding: "10px 14px",
     cursor: "pointer",
+    fontWeight: "600",
 };
 
 export default Appointments;
