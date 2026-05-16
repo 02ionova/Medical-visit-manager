@@ -51,6 +51,7 @@ function create(appointment) {
         to: appointment.to,
         type: appointment.type,
         price: appointment.price,
+        status: appointment.status || "Planned",
         note: appointment.note || "",
         patientId: appointment.patientId,
     };

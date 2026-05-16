@@ -1,5 +1,6 @@
 const express = require("express");
 const patientDao = require("../dao/patientDao");
+const appointmentDao = require("../dao/appointmentDao");
 
 const router = express.Router();
 
@@ -69,14 +70,29 @@ router.put("/:id", (req, res) => {
 
 // Delete patient
 router.delete("/:id", (req, res) => {
-    const deleted = patientDao.remove(req.params.id);
+    const patient = patientDao.get(req.params.id);
 
-    if (!deleted) {
+    if (!patient) {
         return res.status(404).json({
             code: "patientNotFound",
             message: "Patient does not exist.",
         });
     }
+
+    const appointments = appointmentDao.list();
+    const patientHasAppointments = appointments.some(
+        (appointment) => appointment.patientId === req.params.id
+    );
+
+    if (patientHasAppointments) {
+        return res.status(400).json({
+            code: "patientHasAppointments",
+            message:
+                "Patient cannot be deleted because appointments are assigned to this patient.",
+        });
+    }
+
+    patientDao.remove(req.params.id);
 
     res.status(204).send();
 });

@@ -57,6 +57,20 @@ router.get("/:id", (req, res) => {
     res.json(a);
 });
 
+// Update
+router.put("/:id", (req, res) => {
+    const updatedAppointment = appointmentDao.update(req.params.id, req.body);
+
+    if (!updatedAppointment) {
+        return res.status(404).json({
+            code: "appointmentNotFound",
+            message: "Appointment does not exist.",
+        });
+    }
+
+    res.json(updatedAppointment);
+});
+
 // Delete
 router.delete("/:id", (req, res) => {
     const ok = appointmentDao.remove(req.params.id);
