@@ -1,43 +1,69 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function NavBar() {
+    const location = useLocation();
+
     return (
         <nav
             style={{
-                width: "220px",
-                background: "#2563eb",
+                width: "260px",
+                background: "#1e40af",
                 color: "white",
-                padding: "30px"
+                padding: "32px 24px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "24px",
             }}
         >
-            <h2>Medical Manager</h2>
+            <div>
+                <h1 style={{ fontSize: "24px", marginBottom: "8px" }}>
+                    Medical Manager
+                </h1>
 
-            <ul style={{ listStyle: "none", padding: 0 }}>
-                <li style={{ margin: "20px 0" }}>
-                    <Link to="/" style={{ color: "white", textDecoration: "none" }}>
-                        Dashboard
-                    </Link>
-                </li>
+                <p style={{ color: "#bfdbfe" }}>
+                    Healthcare administration
+                </p>
+            </div>
 
-                <li style={{ margin: "20px 0" }}>
-                    <Link
-                        to="/patients"
-                        style={{ color: "white", textDecoration: "none" }}
-                    >
-                        Patients
-                    </Link>
-                </li>
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                <NavItem
+                    to="/"
+                    label="Dashboard"
+                    active={location.pathname === "/"}
+                />
 
-                <li style={{ margin: "20px 0" }}>
-                    <Link
-                        to="/appointments"
-                        style={{ color: "white", textDecoration: "none" }}
-                    >
-                        Appointments
-                    </Link>
-                </li>
-            </ul>
+                <NavItem
+                    to="/patients"
+                    label="Patients"
+                    active={location.pathname === "/patients"}
+                />
+
+                <NavItem
+                    to="/appointments"
+                    label="Appointments"
+                    active={location.pathname === "/appointments"}
+                />
+            </div>
         </nav>
+    );
+}
+
+function NavItem({ to, label, active }) {
+    return (
+        <Link
+            to={to}
+            style={{
+                textDecoration: "none",
+                color: "white",
+                padding: "14px 16px",
+                borderRadius: "12px",
+                background: active ? "#2563eb" : "transparent",
+                transition: "0.2s",
+                fontWeight: active ? "600" : "500",
+            }}
+        >
+            {label}
+        </Link>
     );
 }
 

@@ -9,9 +9,9 @@ function Layout() {
             <main
                 style={{
                     flex: 1,
-                    padding: "30px",
-                    background: "#f5f7fb"
-                }}
+                    padding: "40px",
+                    background: "#f3f7fd"
+            }}
             >
                 <Outlet />
             </main>
