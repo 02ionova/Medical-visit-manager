@@ -1,6 +1,9 @@
 # Medical Visit Manager 🏥
 
-> INSERT YOUR GIF / SCREEN RECORDING HERE
+<img width="800" height="432" alt="ScreenRecording2026-05-17at9 23 37-ezgif com-video-to-gif-converter (1)" src="https://github.com/user-attachments/assets/f47d3f35-f19d-48c3-a3ed-4868ff8cde0b" />
+
+
+
 
 ---
 
@@ -266,32 +269,31 @@ The application includes:
 # 📸 Screenshots
 
 ## Dashboard
-
-> INSERT SCREENSHOT HERE
+<img width="1470" height="794" alt="Screenshot 2026-05-17 at 9 42 44" src="https://github.com/user-attachments/assets/73b9ba79-78a1-412f-ae22-d6470a31d6cd" />
 
 ---
 
 ## Patients Page
-
-> INSERT SCREENSHOT HERE
+<img width="1470" height="794" alt="Screenshot 2026-05-17 at 9 44 04" src="https://github.com/user-attachments/assets/ad2353d4-1a1a-4491-a09b-7dd85dd7b811" />
 
 ---
 
 ## Patient Form
 
-> INSERT SCREENSHOT HERE
+<img width="1470" height="794" alt="Screenshot 2026-05-17 at 9 44 27" src="https://github.com/user-attachments/assets/35d4e2d7-9596-47c1-a1c7-a20419dc5dbe" />
 
 ---
 
 ## Appointments Page
 
-> INSERT SCREENSHOT HERE
+<img width="1470" height="794" alt="Screenshot 2026-05-17 at 9 44 48" src="https://github.com/user-attachments/assets/85b634ee-e3bc-4a3c-87e8-c47b126bee18" />
+
 
 ---
 
 ## Appointment Form
 
-> INSERT SCREENSHOT HERE
+<img width="1470" height="794" alt="Screenshot 2026-05-17 at 9 45 08" src="https://github.com/user-attachments/assets/36cf88c1-c864-4fbf-9bc3-3ed4fbb0e6b8" />
 
 ---
 
