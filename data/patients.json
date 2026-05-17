@@ -1,56 +1,402 @@
 [
-  { "id": "1", "fullName": "Anna Novak", "phone": "+420771293480", "dateOfBirth": "1992-05-14", "address": "Karlovo namesti 21, Prague", "note": "Allergic to penicillin" },
-  { "id": "2", "fullName": "John Smith", "phone": "+420774928300", "dateOfBirth": "1988-11-03", "address": "Vinohradska 55, Prague", "note": "" },
-  { "id": "3", "fullName": "Petra Svobodova", "phone": "+420702193001", "dateOfBirth": "1997-03-21", "address": "Andel 18, Prague", "note": "Vitamin D deficiency" },
-  { "id": "4", "fullName": "Martin Dvorak", "phone": "+420775123991", "dateOfBirth": "1979-09-12", "address": "Narodni 10, Prague", "note": "" },
-  { "id": "5", "fullName": "Eva Horakova", "phone": "+420606923810", "dateOfBirth": "1990-07-07", "address": "Vaclavske namesti 44, Prague", "note": "Frequent fatigue" },
-  { "id": "6", "fullName": "Daniel Prochazka", "phone": "+420734920111", "dateOfBirth": "1985-02-17", "address": "Dejvice 15, Prague", "note": "" },
-  { "id": "7", "fullName": "Natalia Ionova", "phone": "+420774279171", "dateOfBirth": "2002-01-16", "address": "Smichov 12, Prague", "note": "VIP client" },
-  { "id": "8", "fullName": "Klara Benesova", "phone": "+420702821003", "dateOfBirth": "1999-12-30", "address": "Smichov 81, Prague", "note": "" },
-  { "id": "9", "fullName": "Lukas Marek", "phone": "+420739283101", "dateOfBirth": "1995-08-08", "address": "Florenc 8, Prague", "note": "Low iron" },
-  { "id": "10", "fullName": "Monika Kralova", "phone": "+420608221122", "dateOfBirth": "1983-06-22", "address": "Holesovice 45, Prague", "note": "" },
-
-  { "id": "11", "fullName": "Tereza Vesela", "phone": "+420777184293", "dateOfBirth": "1991-04-19", "address": "Zizkov 31, Prague", "note": "" },
-  { "id": "12", "fullName": "Jakub Malek", "phone": "+420732918440", "dateOfBirth": "1986-10-01", "address": "Karlín 19, Prague", "note": "Prefers morning visits" },
-  { "id": "13", "fullName": "Lucie Kucerova", "phone": "+420605881204", "dateOfBirth": "1994-02-26", "address": "Letna 7, Prague", "note": "" },
-  { "id": "14", "fullName": "Marek Novotny", "phone": "+420734770912", "dateOfBirth": "1978-01-15", "address": "Nusle 28, Prague", "note": "Chronic fatigue" },
-  { "id": "15", "fullName": "Barbora Fialova", "phone": "+420777300442", "dateOfBirth": "1998-09-09", "address": "Pankrac 42, Prague", "note": "" },
-  { "id": "16", "fullName": "Filip Sedlak", "phone": "+420603917285", "dateOfBirth": "1989-07-28", "address": "Bubenec 14, Prague", "note": "" },
-  { "id": "17", "fullName": "Veronika Urbanova", "phone": "+420608771920", "dateOfBirth": "1993-11-11", "address": "Vrsovice 36, Prague", "note": "Sensitive veins" },
-  { "id": "18", "fullName": "Tomas Kovar", "phone": "+420777419003", "dateOfBirth": "1981-12-05", "address": "Modrany 25, Prague", "note": "" },
-  { "id": "19", "fullName": "Eliska Krejci", "phone": "+420734220911", "dateOfBirth": "2000-03-18", "address": "Strahov 6, Prague", "note": "" },
-  { "id": "20", "fullName": "Adam Pospisil", "phone": "+420605113829", "dateOfBirth": "1987-08-31", "address": "Prosek 17, Prague", "note": "Needs invoice" },
-
-  { "id": "21", "fullName": "Sofia Petrova", "phone": "+420774555120", "dateOfBirth": "1996-06-13", "address": "Cerny Most 11, Prague", "note": "" },
-  { "id": "22", "fullName": "Nina Volkova", "phone": "+420702901882", "dateOfBirth": "1990-10-22", "address": "Vysehrad 9, Prague", "note": "" },
-  { "id": "23", "fullName": "Pavel Sima", "phone": "+420608120044", "dateOfBirth": "1984-04-04", "address": "Brevnov 22, Prague", "note": "Post-operative care" },
-  { "id": "24", "fullName": "Kristyna Havelkova", "phone": "+420777666293", "dateOfBirth": "1992-02-02", "address": "Hostivar 13, Prague", "note": "" },
-  { "id": "25", "fullName": "Roman Blaha", "phone": "+420734883101", "dateOfBirth": "1976-05-25", "address": "Kobylisy 5, Prague", "note": "" },
-  { "id": "26", "fullName": "Michaela Reznikova", "phone": "+420605772309", "dateOfBirth": "1999-01-07", "address": "Podoli 18, Prague", "note": "Low blood pressure" },
-  { "id": "27", "fullName": "Alex Johnson", "phone": "+420777991020", "dateOfBirth": "1982-03-30", "address": "Prague 1, Old Town", "note": "English speaking client" },
-  { "id": "28", "fullName": "Karolina Ticha", "phone": "+420734661922", "dateOfBirth": "1995-12-12", "address": "Prague 6, Dejvice", "note": "" },
-  { "id": "29", "fullName": "Simon Novak", "phone": "+420608553120", "dateOfBirth": "1988-06-06", "address": "Prague 4, Pankrac", "note": "" },
-  { "id": "30", "fullName": "Jana Ruzickova", "phone": "+420702118392", "dateOfBirth": "1991-09-29", "address": "Prague 3, Zizkov", "note": "Prefers evening visits" },
-
-  { "id": "31", "fullName": "Robert Klein", "phone": "+420777440281", "dateOfBirth": "1974-07-17", "address": "Prague 2, Vinohrady", "note": "" },
-  { "id": "32", "fullName": "Alena Markova", "phone": "+420734551003", "dateOfBirth": "1980-08-08", "address": "Prague 5, Andel", "note": "Wound dressing required" },
-  { "id": "33", "fullName": "Viktor Svoboda", "phone": "+420608992301", "dateOfBirth": "1986-02-19", "address": "Prague 8, Karlin", "note": "" },
-  { "id": "34", "fullName": "Linda Novakova", "phone": "+420777881993", "dateOfBirth": "1997-11-27", "address": "Prague 7, Letna", "note": "" },
-  { "id": "35", "fullName": "Michael Brown", "phone": "+420734192003", "dateOfBirth": "1983-01-23", "address": "Prague 1, Josefov", "note": "English speaking client" },
-  { "id": "36", "fullName": "Sara Kolarova", "phone": "+420605991200", "dateOfBirth": "1994-05-05", "address": "Prague 10, Vrsovice", "note": "" },
-  { "id": "37", "fullName": "Erik Novak", "phone": "+420777203184", "dateOfBirth": "1979-12-21", "address": "Prague 9, Prosek", "note": "Diabetes monitoring" },
-  { "id": "38", "fullName": "Nikola Duskova", "phone": "+420734119820", "dateOfBirth": "1998-04-14", "address": "Prague 6, Bubenec", "note": "" },
-  { "id": "39", "fullName": "Oliver White", "phone": "+420608772001", "dateOfBirth": "1985-06-18", "address": "Prague 2, Nove Mesto", "note": "" },
-  { "id": "40", "fullName": "Hana Vesela", "phone": "+420702551820", "dateOfBirth": "1990-02-10", "address": "Prague 4, Modrany", "note": "Requires home visit only" },
-
-  { "id": "41", "fullName": "Matej Novak", "phone": "+420777304998", "dateOfBirth": "1993-10-10", "address": "Prague 5, Smichov", "note": "" },
-  { "id": "42", "fullName": "Simona Kralova", "phone": "+420734881102", "dateOfBirth": "1987-03-03", "address": "Prague 8, Liben", "note": "" },
-  { "id": "43", "fullName": "Peter Novak", "phone": "+420608441777", "dateOfBirth": "1977-09-15", "address": "Prague 10, Strasnice", "note": "Needs regular monitoring" },
-  { "id": "44", "fullName": "Laura Novakova", "phone": "+420777661020", "dateOfBirth": "1996-12-01", "address": "Prague 3, Flora", "note": "" },
-  { "id": "45", "fullName": "Denis Marek", "phone": "+420734220109", "dateOfBirth": "1989-11-20", "address": "Prague 1, Mustek", "note": "" },
-  { "id": "46", "fullName": "Marta Horakova", "phone": "+420608991882", "dateOfBirth": "1981-07-04", "address": "Prague 4, Krc", "note": "Post-hospital recovery" },
-  { "id": "47", "fullName": "Jan Cerny", "phone": "+420777218400", "dateOfBirth": "1975-05-30", "address": "Prague 6, Petriny", "note": "" },
-  { "id": "48", "fullName": "Emma Wilson", "phone": "+420734771103", "dateOfBirth": "1999-08-16", "address": "Prague 2, Namesti Miru", "note": "English speaking client" },
-  { "id": "49", "fullName": "Patrik Fiala", "phone": "+420608118399", "dateOfBirth": "1984-01-09", "address": "Prague 7, Holesovice", "note": "" },
-  { "id": "50", "fullName": "Olga Petrova", "phone": "+420702882441", "dateOfBirth": "1991-06-24", "address": "Prague 5, Radlicka", "note": "Prefers female nurse" }
+  {
+    "id": "1",
+    "fullName": "Anna Novak",
+    "phone": "+420771293480",
+    "dateOfBirth": "1992-05-14",
+    "address": "Karlovo namesti 21, Prague",
+    "note": "Allergic to penicillin"
+  },
+  {
+    "id": "2",
+    "fullName": "John Smith",
+    "phone": "+420774928300",
+    "dateOfBirth": "1988-11-03",
+    "address": "Vinohradska 55, Prague",
+    "note": ""
+  },
+  {
+    "id": "3",
+    "fullName": "Petra Svobodova",
+    "phone": "+420702193001",
+    "dateOfBirth": "1997-03-21",
+    "address": "Andel 18, Prague",
+    "note": "Vitamin D deficiency"
+  },
+  {
+    "id": "4",
+    "fullName": "Martin Dvorak",
+    "phone": "+420775123991",
+    "dateOfBirth": "1979-09-12",
+    "address": "Narodni 10, Prague",
+    "note": ""
+  },
+  {
+    "id": "5",
+    "fullName": "Eva Horakova",
+    "phone": "+420606923810",
+    "dateOfBirth": "1990-07-07",
+    "address": "Vaclavske namesti 44, Prague",
+    "note": "Frequent fatigue"
+  },
+  {
+    "id": "6",
+    "fullName": "Daniel Prochazka",
+    "phone": "+420734920111",
+    "dateOfBirth": "1985-02-17",
+    "address": "Dejvice 15, Prague",
+    "note": ""
+  },
+  {
+    "id": "7",
+    "fullName": "Natalia Ionova",
+    "phone": "+420774279171",
+    "dateOfBirth": "2002-01-16",
+    "address": "U Nikolajky 12, Prague",
+    "note": "VIP client"
+  },
+  {
+    "id": "8",
+    "fullName": "Klara Benesova",
+    "phone": "+420702821003",
+    "dateOfBirth": "1999-12-30",
+    "address": "Smichov 81, Prague",
+    "note": ""
+  },
+  {
+    "id": "9",
+    "fullName": "Lukas Marek",
+    "phone": "+420739283101",
+    "dateOfBirth": "1995-08-08",
+    "address": "Florenc 8, Prague",
+    "note": "Low iron"
+  },
+  {
+    "id": "10",
+    "fullName": "Monika Kralova",
+    "phone": "+420608221122",
+    "dateOfBirth": "1983-06-22",
+    "address": "Holesovice 45, Prague",
+    "note": ""
+  },
+  {
+    "id": "11",
+    "fullName": "Tereza Vesela",
+    "phone": "+420777184293",
+    "dateOfBirth": "1991-04-19",
+    "address": "Zizkov 31, Prague",
+    "note": ""
+  },
+  {
+    "id": "12",
+    "fullName": "Jakub Malek",
+    "phone": "+420732918440",
+    "dateOfBirth": "1986-10-01",
+    "address": "Karlín 19, Prague",
+    "note": "Prefers morning visits"
+  },
+  {
+    "id": "13",
+    "fullName": "Lucie Kucerova",
+    "phone": "+420605881204",
+    "dateOfBirth": "1994-02-26",
+    "address": "Letna 7, Prague",
+    "note": ""
+  },
+  {
+    "id": "14",
+    "fullName": "Marek Novotny",
+    "phone": "+420734770912",
+    "dateOfBirth": "1978-01-15",
+    "address": "Nusle 28, Prague",
+    "note": "Chronic fatigue"
+  },
+  {
+    "id": "15",
+    "fullName": "Barbora Fialova",
+    "phone": "+420777300442",
+    "dateOfBirth": "1998-09-09",
+    "address": "Pankrac 42, Prague",
+    "note": ""
+  },
+  {
+    "id": "16",
+    "fullName": "Filip Sedlak",
+    "phone": "+420603917285",
+    "dateOfBirth": "1989-07-28",
+    "address": "Bubenec 14, Prague",
+    "note": ""
+  },
+  {
+    "id": "17",
+    "fullName": "Veronika Urbanova",
+    "phone": "+420608771920",
+    "dateOfBirth": "1993-11-11",
+    "address": "Vrsovice 36, Prague",
+    "note": "Sensitive veins"
+  },
+  {
+    "id": "18",
+    "fullName": "Tomas Kovar",
+    "phone": "+420777419003",
+    "dateOfBirth": "1981-12-05",
+    "address": "Modrany 25, Prague",
+    "note": ""
+  },
+  {
+    "id": "19",
+    "fullName": "Eliska Krejci",
+    "phone": "+420734220911",
+    "dateOfBirth": "2000-03-18",
+    "address": "Strahov 6, Prague",
+    "note": ""
+  },
+  {
+    "id": "20",
+    "fullName": "Adam Pospisil",
+    "phone": "+420605113829",
+    "dateOfBirth": "1987-08-31",
+    "address": "Prosek 17, Prague",
+    "note": "Needs invoice"
+  },
+  {
+    "id": "21",
+    "fullName": "Sofia Petrova",
+    "phone": "+420774555120",
+    "dateOfBirth": "1996-06-13",
+    "address": "Cerny Most 11, Prague",
+    "note": ""
+  },
+  {
+    "id": "22",
+    "fullName": "Nina Volkova",
+    "phone": "+420702901882",
+    "dateOfBirth": "1990-10-22",
+    "address": "Vysehrad 9, Prague",
+    "note": ""
+  },
+  {
+    "id": "23",
+    "fullName": "Pavel Sima",
+    "phone": "+420608120044",
+    "dateOfBirth": "1984-04-04",
+    "address": "Brevnov 22, Prague",
+    "note": "Post-operative care"
+  },
+  {
+    "id": "24",
+    "fullName": "Kristyna Havelkova",
+    "phone": "+420777666293",
+    "dateOfBirth": "1992-02-02",
+    "address": "Hostivar 13, Prague",
+    "note": ""
+  },
+  {
+    "id": "25",
+    "fullName": "Roman Blaha",
+    "phone": "+420734883101",
+    "dateOfBirth": "1976-05-25",
+    "address": "Kobylisy 5, Prague",
+    "note": ""
+  },
+  {
+    "id": "26",
+    "fullName": "Michaela Reznikova",
+    "phone": "+420605772309",
+    "dateOfBirth": "1999-01-07",
+    "address": "Podoli 18, Prague",
+    "note": "Low blood pressure"
+  },
+  {
+    "id": "27",
+    "fullName": "Alex Johnson",
+    "phone": "+420777991020",
+    "dateOfBirth": "1982-03-30",
+    "address": "Prague 1, Old Town",
+    "note": "English speaking client"
+  },
+  {
+    "id": "28",
+    "fullName": "Karolina Ticha",
+    "phone": "+420734661922",
+    "dateOfBirth": "1995-12-12",
+    "address": "Prague 6, Dejvice",
+    "note": ""
+  },
+  {
+    "id": "29",
+    "fullName": "Simon Novak",
+    "phone": "+420608553120",
+    "dateOfBirth": "1988-06-06",
+    "address": "Prague 4, Pankrac",
+    "note": ""
+  },
+  {
+    "id": "30",
+    "fullName": "Jana Ruzickova",
+    "phone": "+420702118392",
+    "dateOfBirth": "1991-09-29",
+    "address": "Prague 3, Zizkov",
+    "note": "Prefers evening visits"
+  },
+  {
+    "id": "31",
+    "fullName": "Robert Klein",
+    "phone": "+420777440281",
+    "dateOfBirth": "1974-07-17",
+    "address": "Prague 2, Vinohrady",
+    "note": ""
+  },
+  {
+    "id": "32",
+    "fullName": "Alena Markova",
+    "phone": "+420734551003",
+    "dateOfBirth": "1980-08-08",
+    "address": "Prague 5, Andel",
+    "note": "Wound dressing required"
+  },
+  {
+    "id": "33",
+    "fullName": "Viktor Svoboda",
+    "phone": "+420608992301",
+    "dateOfBirth": "1986-02-19",
+    "address": "Prague 8, Karlin",
+    "note": ""
+  },
+  {
+    "id": "34",
+    "fullName": "Linda Novakova",
+    "phone": "+420777881993",
+    "dateOfBirth": "1997-11-27",
+    "address": "Prague 7, Letna",
+    "note": ""
+  },
+  {
+    "id": "35",
+    "fullName": "Michael Brown",
+    "phone": "+420734192003",
+    "dateOfBirth": "1983-01-23",
+    "address": "Prague 1, Josefov",
+    "note": "English speaking client"
+  },
+  {
+    "id": "36",
+    "fullName": "Sara Kolarova",
+    "phone": "+420605991200",
+    "dateOfBirth": "1994-05-05",
+    "address": "Prague 10, Vrsovice",
+    "note": ""
+  },
+  {
+    "id": "37",
+    "fullName": "Erik Novak",
+    "phone": "+420777203184",
+    "dateOfBirth": "1979-12-21",
+    "address": "Prague 9, Prosek",
+    "note": "Diabetes monitoring"
+  },
+  {
+    "id": "38",
+    "fullName": "Nikola Duskova",
+    "phone": "+420734119820",
+    "dateOfBirth": "1998-04-14",
+    "address": "Prague 6, Bubenec",
+    "note": ""
+  },
+  {
+    "id": "39",
+    "fullName": "Oliver White",
+    "phone": "+420608772001",
+    "dateOfBirth": "1985-06-18",
+    "address": "Prague 2, Nove Mesto",
+    "note": ""
+  },
+  {
+    "id": "40",
+    "fullName": "Hana Vesela",
+    "phone": "+420702551820",
+    "dateOfBirth": "1990-02-10",
+    "address": "Prague 4, Modrany",
+    "note": "Requires home visit only"
+  },
+  {
+    "id": "41",
+    "fullName": "Matej Novak",
+    "phone": "+420777304998",
+    "dateOfBirth": "1993-10-10",
+    "address": "Prague 5, Smichov",
+    "note": ""
+  },
+  {
+    "id": "42",
+    "fullName": "Simona Kralova",
+    "phone": "+420734881102",
+    "dateOfBirth": "1987-03-03",
+    "address": "Prague 8, Liben",
+    "note": ""
+  },
+  {
+    "id": "43",
+    "fullName": "Peter Novak",
+    "phone": "+420608441777",
+    "dateOfBirth": "1977-09-15",
+    "address": "Prague 10, Strasnice",
+    "note": "Needs regular monitoring"
+  },
+  {
+    "id": "44",
+    "fullName": "Laura Novakova",
+    "phone": "+420777661020",
+    "dateOfBirth": "1996-12-01",
+    "address": "Prague 3, Flora",
+    "note": ""
+  },
+  {
+    "id": "45",
+    "fullName": "Denis Marek",
+    "phone": "+420734220109",
+    "dateOfBirth": "1989-11-20",
+    "address": "Prague 1, Mustek",
+    "note": ""
+  },
+  {
+    "id": "46",
+    "fullName": "Marta Horakova",
+    "phone": "+420608991882",
+    "dateOfBirth": "1981-07-04",
+    "address": "Prague 4, Krc",
+    "note": "Post-hospital recovery"
+  },
+  {
+    "id": "47",
+    "fullName": "Jan Cerny",
+    "phone": "+420777218400",
+    "dateOfBirth": "1975-05-30",
+    "address": "Prague 6, Petriny",
+    "note": ""
+  },
+  {
+    "id": "48",
+    "fullName": "Emma Wilson",
+    "phone": "+420734771103",
+    "dateOfBirth": "1999-08-16",
+    "address": "Prague 2, Namesti Miru",
+    "note": "English speaking client"
+  },
+  {
+    "id": "49",
+    "fullName": "Patrik Fiala",
+    "phone": "+420608118399",
+    "dateOfBirth": "1984-01-09",
+    "address": "Prague 7, Holesovice",
+    "note": ""
+  },
+  {
+    "id": "50",
+    "fullName": "Olga Petrova",
+    "phone": "+420702882441",
+    "dateOfBirth": "1991-06-24",
+    "address": "Prague 5, Radlicka",
+    "note": "Prefers female nurse"
+  }
 ]
