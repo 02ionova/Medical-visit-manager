@@ -48,11 +48,6 @@ function Dashboard() {
         return acc;
     }, {});
 
-    const appointmentsByDate = appointments.reduce((acc, appointment) => {
-        acc[appointment.date] = (acc[appointment.date] || 0) + 1;
-        return acc;
-    }, {});
-
     return (
         <div>
             <HeaderClock now={now} />
@@ -79,8 +74,7 @@ function Dashboard() {
                 </section>
 
                 <section style={panelStyle}>
-                    <h2>Appointments by Date</h2>
-                    <DateBarChart data={appointmentsByDate} />
+                    <TodayWidget appointments={todayAppointments} patients={patients} />
                 </section>
 
                 <section style={panelStyle}>
@@ -95,14 +89,11 @@ function Dashboard() {
                 </section>
 
                 <section style={panelStyle}>
-                    <h2>Today</h2>
-                    <p style={{ color: "#64748b", marginBottom: "16px" }}>
-                        Appointments planned for today
-                    </p>
-
-                    <h3 style={{ fontSize: "42px", margin: 0 }}>
-                        {todayAppointments.length}
-                    </h3>
+                    <UpcomingAppointments
+                        appointments={appointments}
+                        patients={patients}
+                        now={now}
+                    />
                 </section>
             </div>
         </div>
@@ -249,41 +240,124 @@ function PieChart({ data }) {
     );
 }
 
-function DateBarChart({ data }) {
-    const entries = Object.entries(data).sort(([a], [b]) => a.localeCompare(b));
-    const maxValue = Math.max(...entries.map(([, value]) => value), 1);
+function UpcomingAppointments({ appointments, patients, now }) {
+    const today = now.toISOString().slice(0, 10);
 
-    if (entries.length === 0) {
-        return <p style={{ color: "#64748b" }}>No data available.</p>;
+    const upcoming = appointments
+        .filter((appointment) => appointment.date >= today)
+        .sort((a, b) => `${a.date}T${a.from}`.localeCompare(`${b.date}T${b.from}`))
+        .slice(0, 4);
+
+    function getPatientName(patientId) {
+        const patient = patients.find((p) => p.id === patientId);
+        return patient ? patient.fullName : "Unknown patient";
     }
 
     return (
         <div>
-            {entries.map(([date, value]) => {
-                const formattedDate = new Date(date).toLocaleDateString("en-GB", {
-                    day: "2-digit",
-                    month: "short",
-                });
+            <h2>Upcoming Appointments</h2>
 
-                return (
-                    <div key={date} style={{ marginBottom: "16px" }}>
-                        <div style={chartLabelStyle}>
-                            <span>{formattedDate}</span>
-                            <strong>{value} appointments</strong>
-                        </div>
+            <p style={{ color: "#64748b", marginBottom: "18px" }}>
+                Next planned visits in the schedule
+            </p>
 
-                        <div style={barBackgroundStyle}>
-                            <div
-                                style={{
-                                    ...barFillStyle,
-                                    width: `${(value / maxValue) * 100}%`,
-                                }}
-                            />
+            {upcoming.length === 0 ? (
+                <div style={emptyTodayStyle}>No upcoming appointments.</div>
+            ) : (
+                <div style={upcomingListStyle}>
+                    {upcoming.map((appointment) => (
+                        <div key={appointment.id} style={upcomingItemStyle}>
+                            <div>
+                                <strong>{appointment.type}</strong>
+
+                                <p style={{ color: "#64748b", margin: "6px 0" }}>
+                                    {getPatientName(appointment.patientId)}
+                                </p>
+
+                                <p style={{ color: "#64748b", margin: 0 }}>
+                                    {appointment.date}, {appointment.from} - {appointment.to}
+                                </p>
+                            </div>
+
+                            <StatusBadge status={appointment.status || "Planned"} />
                         </div>
-                    </div>
-                );
-            })}
+                    ))}
+                </div>
+            )}
         </div>
+    );
+}
+
+function TodayWidget({ appointments, patients }) {
+    function getPatientName(patientId) {
+        const patient = patients.find((p) => p.id === patientId);
+        return patient ? patient.fullName : "Unknown patient";
+    }
+
+    return (
+        <div>
+            <h2>Today</h2>
+
+            <p style={{ color: "#64748b", marginBottom: "16px" }}>
+                Appointments planned for today
+            </p>
+
+            <h3 style={{ fontSize: "42px", margin: "0 0 20px" }}>
+                {appointments.length}
+            </h3>
+
+            {appointments.length === 0 ? (
+                <div style={emptyTodayStyle}>No appointments planned for today.</div>
+            ) : (
+                <div style={todayListStyle}>
+                    {appointments.map((appointment) => (
+                        <div key={appointment.id} style={todayItemStyle}>
+                            <div>
+                                <strong>{appointment.type}</strong>
+
+                                <p style={{ color: "#64748b", margin: "6px 0" }}>
+                                    {getPatientName(appointment.patientId)}
+                                </p>
+
+                                <p style={{ color: "#64748b", margin: 0 }}>
+                                    {appointment.from} - {appointment.to}
+                                </p>
+                            </div>
+
+                            <StatusBadge status={appointment.status || "Planned"} />
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+}
+
+function StatusBadge({ status }) {
+    const styles = {
+        Planned: {
+            background: "#dbeafe",
+            color: "#1d4ed8",
+        },
+        Completed: {
+            background: "#dcfce7",
+            color: "#15803d",
+        },
+        Cancelled: {
+            background: "#fee2e2",
+            color: "#b91c1c",
+        },
+    };
+
+    return (
+        <span
+            style={{
+                ...statusBadgeStyle,
+                ...(styles[status] || styles.Planned),
+            }}
+        >
+      {status}
+    </span>
     );
 }
 
@@ -455,23 +529,50 @@ const legendDotStyle = {
     borderRadius: "50%",
 };
 
-const chartLabelStyle = {
+const upcomingListStyle = {
+    display: "flex",
+    flexDirection: "column",
+    gap: "12px",
+};
+
+const upcomingItemStyle = {
+    background: "#f8fafc",
+    borderRadius: "16px",
+    padding: "16px",
     display: "flex",
     justifyContent: "space-between",
-    marginBottom: "8px",
+    alignItems: "center",
 };
 
-const barBackgroundStyle = {
-    height: "14px",
-    background: "#e5e7eb",
-    borderRadius: "999px",
-    overflow: "hidden",
+const todayListStyle = {
+    display: "flex",
+    flexDirection: "column",
+    gap: "12px",
 };
 
-const barFillStyle = {
-    height: "100%",
-    background: "#3b82f6",
+const todayItemStyle = {
+    background: "#f8fafc",
+    borderRadius: "16px",
+    padding: "16px",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+};
+
+const statusBadgeStyle = {
+    display: "inline-block",
+    padding: "6px 12px",
     borderRadius: "999px",
+    fontSize: "13px",
+    fontWeight: "700",
+    whiteSpace: "nowrap",
+};
+
+const emptyTodayStyle = {
+    background: "#f8fafc",
+    borderRadius: "16px",
+    padding: "20px",
+    color: "#64748b",
 };
 
 const clockGridStyle = {
